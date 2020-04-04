@@ -1,2 +1,2 @@
-# covid-mobility-analysis
-An analysis Google location data of personal mobility during the COVID-19 pandemic
+# COVID-19 Mobility Analysis
+An analysis of Google location data of personal mobility during the COVID-19 pandemic
