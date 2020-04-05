@@ -1,0 +1,43 @@
+---
+title: "Analysis"
+author: "Adam Shelton"
+date: "4/5/2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+library(skimr)
+library(kableExtra)
+library(cowpoke) #devtools::install_github("tonofshell/cowpoke")
+library(beachball) #devtools::install_github("tonofshell/beachball")
+library(FactoMineR)
+library(factoextra)
+library(mgcv)
+library(glmnet)
+library(ranger)
+library(ggcorrplot)
+library(extrafont)
+library(tidyverse)
+library(here)
+
+knitr::opts_chunk$set(echo = TRUE, dpi = 200)
+
+windowsFonts(`Pragati Narrow` = windowsFont("Pragati Narrow"))
+
+merged_data = readRDS(here("Data", "covid_demo_data.rds")) %>% mutate_at(vars("family_density", "hu_density", "land_area", "pop_density"), as.numeric) %>% mutate_if(is.character, factor)
+```
+
+## Descriptive Statistics
+```{r descr-stats}
+descr_stats = merged_data %>% select(-geometry, -id) %>% skim() %>% partition()
+
+descr_stats$factor %>% kable()
+descr_stats$Date %>% kable()
+descr_stats$numeric %>% kable()
+```
+
+```{r cor-plot, fig.width=20, fig.height=20}
+merged_data %>% select(-geometry, -id) %>% mutate_all(as.numeric) %>% {ggcorrplot(cor(., use = "pairwise.complete.obs"), p.mat = cor_pmat(., use = "pairwise.complete.obs"), hc.order = TRUE, insig = "pch", lab = FALSE, colors = color_pal(3, "segmented"))} + theme_day(base_family = "Pragati Narrow", base_size = 18) + theme(axis.text.x = element_text(angle = 45, hjust = 1), axis.title = element_blank())
+```
+
+
