@@ -20,7 +20,7 @@ library(extrafont)
 library(tidyverse)
 library(here)
 
-knitr::opts_chunk$set(echo = TRUE, dpi = 200)
+knitr::opts_chunk$set(echo = TRUE, dpi = 200, fig.height = 6, fig.width = 9)
 
 windowsFonts(`Pragati Narrow` = windowsFont("Pragati Narrow"))
 
@@ -40,4 +40,23 @@ descr_stats$numeric %>% kable()
 merged_data %>% select(-geometry, -id) %>% mutate_all(as.numeric) %>% {ggcorrplot(cor(., use = "pairwise.complete.obs"), p.mat = cor_pmat(., use = "pairwise.complete.obs"), hc.order = TRUE, insig = "pch", lab = FALSE, colors = color_pal(3, "segmented"))} + theme_day(base_family = "Pragati Narrow", base_size = 18) + theme(axis.text.x = element_text(angle = 45, hjust = 1), axis.title = element_blank())
 ```
 
+### Test Plots
+```{r ny-counties}
+merged_data %>% filter(state == "New York", category == "workplace") %>% ggplot(aes(x = date, y = value, color = county)) + geom_line() + scale_color_manual(values = color_pal(47)) + theme_day(base_family = "Pragati Narrow", base_size = 18) + theme(legend.position = "none") + labs(title = "Decrease in Workplace Mobility Among New York Counties", subtitle = "Due to COVID-19 outbreak in the US", x = "Date", y = "Mobility Index")
+```
+```{r by-state}
+merged_data %>% select(state, date, value) %>% group_by(state, date) %>% summarise(value = mean(value)) %>% ggplot(aes(x = date, y = value, color = state)) + geom_line() + scale_color_manual(values = color_pal(51)) + theme_day(base_family = "Pragati Narrow", base_size = 18) + theme(legend.position = "none") + labs(title = "Decrease in Mobility by State", subtitle = "Due to COVID-19 outbreak in the US", x = "Date", y = "Mobility Index")
+```
+
+```{r by-category}
+merged_data %>% select(category, date, value) %>% group_by(category, date) %>% summarise(value = mean(value)) %>% ggplot(aes(x = date, y = value, color = category)) + geom_line(size = 1.5) + scale_color_manual(values = color_pal(6)) + theme_day(base_family = "Pragati Narrow", base_size = 18) + labs(title = "Changes in Mobility by Category", subtitle = "Due to COVID-19 outbreak in the US", x = "Date", y = "Mobility Index")
+```
+
+## Models
+
+### Random Forest
+
+```{r rf-model}
+
+```
 

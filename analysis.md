@@ -5702,3 +5702,27 @@ merged_data %>% select(-geometry, -id) %>% mutate_all(as.numeric) %>% {ggcorrplo
 ```
 
 ![](analysis_files/figure-gfm/cor-plot-1.png)<!-- -->
+
+### Test Plots
+
+``` r
+merged_data %>% filter(state == "New York", category == "workplace") %>% ggplot(aes(x = date, y = value, color = county)) + geom_line() + scale_color_manual(values = color_pal(47)) + theme_day(base_family = "Pragati Narrow", base_size = 18) + theme(legend.position = "none") + labs(title = "Decrease in Workplace Mobility Among New York Counties", subtitle = "Due to COVID-19 outbreak in the US", x = "Date", y = "Mobility Index")
+```
+
+![](analysis_files/figure-gfm/ny-counties-1.png)<!-- -->
+
+``` r
+merged_data %>% select(state, date, value) %>% group_by(state, date) %>% summarise(value = mean(value)) %>% ggplot(aes(x = date, y = value, color = state)) + geom_line() + scale_color_manual(values = color_pal(51)) + theme_day(base_family = "Pragati Narrow", base_size = 18) + theme(legend.position = "none") + labs(title = "Decrease in Mobility by State", subtitle = "Due to COVID-19 outbreak in the US", x = "Date", y = "Mobility Index")
+```
+
+![](analysis_files/figure-gfm/by-state-1.png)<!-- -->
+
+``` r
+merged_data %>% select(category, date, value) %>% group_by(category, date) %>% summarise(value = mean(value)) %>% ggplot(aes(x = date, y = value, color = category)) + geom_line(size = 1.5) + scale_color_manual(values = color_pal(6)) + theme_day(base_family = "Pragati Narrow", base_size = 18) + labs(title = "Changes in Mobility by Category", subtitle = "Due to COVID-19 outbreak in the US", x = "Date", y = "Mobility Index")
+```
+
+![](analysis_files/figure-gfm/by-category-1.png)<!-- -->
+
+## Models
+
+### Random Forest
