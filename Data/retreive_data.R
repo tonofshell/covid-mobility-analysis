@@ -12,7 +12,7 @@ nest_data = function(x) {
   list("data" = x %>% as_tibble() %>% mutate_all(as.character) )
 }
 
-google_covid_data = google_covid_json %>% lapply(nest_data) %>% as_tibble(.name_repair = "unique") %>% pivot_longer(everything()) %>% mutate(name = str_remove_all(name, "\\.")) %>% rename("id" = name) %>% unnest(value) %>% mutate_at(vars("id", "page", "change", "changecalc", "value"), as.numeric) %>% mutate(date = ymd(date)) %>% mutate(NAME = paste(county, state, sep = ", "))
+google_covid_data = google_covid_json %>% lapply(nest_data) %>% as_tibble(.name_repair = "unique") %>% pivot_longer(everything()) %>% mutate(name = str_remove_all(name, "\\.")) %>% rename("id" = name) %>% unnest(value) %>% mutate_at(vars("id", "page", "change", "changecalc", "value"), as.numeric) %>% mutate(date = ymd(date)) %>% mutate(NAME = paste(county, state, sep = ", ")) %>% filter(state != "US")
 
 
 source("api_keys.R")
@@ -65,10 +65,141 @@ acs_18 = get_acs(geography = "county", year = 2018, geometry = TRUE, moe_level =
          pop_not_insured = pop_nb_not_insured + pop_fbn_not_insured + pop_fbnc_not_insured) %>% 
   select(-starts_with("pop_nb"), -starts_with("pop_fbn"), -starts_with("pop_fbnc"))
 
+conv_list = list("Alexandria city, Virginia" = "Alexandria, Virginia",
+     "Anchorage Municipality, Alaska" = "Anchorage, Alaska", 
+     "Baltimore city, Maryland" = "Baltimore, Maryland",
+     "Bristol city, Virginia" = "Bristol, Virginia",
+     "Charlottesville city, Virginia" = "Charlottesville, Virginia",
+     "Colonial Heights city, Virginia" = "Colonial Heights, Virginia", 
+     "Covington city, Virginia" = "Covington, Virginia",
+     "Danville city, Virginia" = "Danville, Virginia",
+     "Do�a Ana County, New Mexico" = "Doña Ana County, New Mexico",
+     "Emporia city, Virginia" = "Emporia, Virginia",
+     "Fairfax city, Virginia" = "Fairfax, Virginia",
+     "Falls Church city, Virginia" = "Falls Church, Virginia",
+     "Franklin city, Virginia" = "Franklin, Virginia",
+     "Fredericksburg city, Virginia" = "Fredericksburg, Virginia",
+     "Galax city, Virginia" = "Galax, Virginia",
+     "Hopewell city, Virginia" = "Hopewell, Virginia",
+     "Ketchikan Gateway Borough, Alaska" = "Ketchikan Gateway, Alaska",
+     "LaSalle Parish, Louisiana" = "La Salle Parish, Louisiana",
+     "Manassas Park city, Virginia" = "Manassas Park, Virginia",
+     "Manassas city, Virginia" = "Manassas, Virginia",
+     "Martinsville city, Virginia" = "Martinsville, Virginia",
+     "Newport News city, Virginia" = "Newport News, Virginia",
+     "Norfolk city, Virginia" = "Norfolk, Virginia",
+     "Norton city, Virginia" = "Norton, Virginia", 
+     "Petersburg city, Virginia" = "Petersburg, Virginia",
+     "Poquoson city, Virginia" = "Poquoson, Virginia",
+     "Portsmouth city, Virginia" = "Portsmouth, Virginia",
+     "Richmond city, Virginia" = "Richmond, Virginia",
+     "Roanoke city, Virginia" = "Roanoke, Virginia",
+     "Salem city, Virginia" = "Salem, Virginia",
+     "St. Louis city, Missouri" = "St. Louis, Missouri",
+     "Staunton city, Virginia" = "Staunton, Virginia",
+     "Suffolk city, Virginia" = "Suffolk, Virginia",
+     "Virginia Beach city, Virginia" = "Virginia Beach, Virginia",
+     "Waynesboro city, Virginia" = "Waynesboro, Virginia",
+     "Winchester city, Virginia" = "Winchester, Virginia")
 
-acs_18_vals = acs_18 %>% mutate(land_area = st_area(geometry) %>% units::set_units(mi^2)) %>% mutate_at(vars(-c("GEOID", "NAME", "total_pop", "med_age", "med_income", "total_hu", "total_families", "month_housing_costs", "geometry", "land_area", "gini_index", "pop_has_comp", "pop_any_inet", "pop_bb_inet")), (function(x) x / .$total_pop)) %>% mutate_at(vars(c("pop_has_comp", "pop_any_inet", "pop_bb_inet")), (function(x) x / .$total_hu)) %>% mutate(pop_density = total_pop / land_area, total_hu = total_hu / land_area, total_families = total_families / land_area) %>% rename(hu_density = total_hu, family_density = total_families)
+dict_swap = function(x, dict_list) {
+  new_val = dict_list[[x]]
+  if (is.null(new_val)) {
+    return(x)
+  }
+  new_val
+}
 
-president_data = read_csv(here("Data", "countypres_2000-2016.csv")) %>% mutate(NAME = paste0(county, " County, ", state), prop_votes = candidatevotes / totalvotes, party = party %>% ifelse(is.na(.) | . == "green", "other", .), party_year = paste0(party, "_", year)) %>% select(NAME, prop_votes, party_year) %>% group_by(NAME, party_year) %>% summarise(prop_votes = sum(prop_votes, na.rm = TRUE)) %>% pivot_wider(id_cols = "NAME", names_from = "party_year", values_from = "prop_votes")
+acs_18_vals = acs_18 %>% mutate(land_area = st_area(geometry) %>% units::set_units(mi^2)) %>% mutate_at(vars(-c("GEOID", "NAME", "total_pop", "med_age", "med_income", "total_hu", "total_families", "month_housing_costs", "geometry", "land_area", "gini_index", "pop_has_comp", "pop_any_inet", "pop_bb_inet")), (function(x) x / .$total_pop)) %>% mutate_at(vars(c("pop_has_comp", "pop_any_inet", "pop_bb_inet")), (function(x) x / .$total_hu)) %>% mutate(pop_density = total_pop / land_area, total_hu = total_hu / land_area, total_families = total_families / land_area, NAME = NAME %>% sapply(dict_swap, dict_list = conv_list)) %>% rename(hu_density = total_hu, family_density = total_families)
+
+pres_count_convs = list("Acadia County, Louisiana" = "Acadia Parish, Louisiana",
+                        "Alexandria County, Virginia" = "Alexandria, Virginia",
+                        "Allen County, Louisiana" = "Allen Parish, Louisiana",
+                        "Anchorage, Alaska" = "Anchorage, Alaska",
+                        "Avoyelles County, Louisiana" = "Avoyelles Parish, Louisiana",
+                        "Baltimore City County, Maryland" = "Baltimore, Maryland",
+                        "Beauregard County, Louisiana" = "Beauregard Parish, Louisiana",
+                        "Bristol County, Virginia" = "Bristol, Virginia",
+                        "Caddo County, Louisiana" = "Caddo Parish, Louisiana",
+                        "Calcasieu County, Louisiana" = "Calcasieu Parish, Louisiana", 
+                        "Caldwell County, Louisiana" = "Caldwell Parish, Louisiana",
+                        "Cameron County, Louisiana" = "Cameron Parish, Louisiana",
+                        "Carson City County, Nevada" = "Carson City, Nevada",
+                        "Charlottesville County, Virginia" = "Charlottesville, Virginia",
+                        "Colonial Heights County, Virginia" = "Colonial Heights, Virginia",
+                        "Concordia County, Louisiana" = "Concordia Parish, Louisiana",
+                        "Covington County, Virginia" = "Covington, Virginia",
+                        "Danville County, Virginia" = "Danville, Virginia",
+                        "De Soto County, Louisiana" = "De Soto Parish, Louisiana",
+                        "Dewitt County, Texas" = "DeWitt County, Texas",
+                        "Dona Ana County, New Mexico" = "Doña Ana County, New Mexico",
+                        "East Baton Rouge County, Louisiana" = "East Baton Rouge Parish, Louisiana",
+                        "East Feliciana County, Louisiana" = "East Feliciana Parish, Louisiana",
+                        "Emporia County, Virginia" = "Emporia, Virginia",
+                        "Evangeline County, Louisiana" = "Evangeline Parish, Louisiana",
+                        "Fairfax County, Virginia" = "Fairfax, Virginia",
+                        "Falls Church County, Virginia" = "Falls Church, Virginia",
+                        "Franklin County, Louisiana" = "Franklin Parish, Louisiana",
+                        "Franklin County, Virginia" = "Franklin, Virginia",
+                        "Fredericksburg County, Virginia" = "Fredericksburg, Virginia",
+                        "Galax County, Virginia" = "Galax, Virginia",
+                        "Grant County, Louisiana" = "Grant Parish, Louisiana",
+                        "Hopewell County, Virginia" = "Hopewell, Virginia",
+                        "Iberia County, Louisiana" = "Iberia Parish, Louisiana",
+                        "Iberville County, Louisiana" = "Iberville Parish, Louisiana",
+                        "Jackson County, Louisiana" = "Jackson Parish, Louisiana",
+                        "Jefferson Davis County, Louisiana" = "Jefferson Davis Parish, Louisiana",
+                        "Jefferson County, Louisiana" = "Jefferson Parish, Louisiana",
+                        "Kenai Peninsula Borough, Alaska" = "Kenai Peninsula Borough, Alaska",
+                        "Ketchikan Gateway, Alaska" = "Ketchikan Gateway, Alaska",
+                        "La Salle County, Louisiana" = "La Salle Parish, Louisiana",
+                        "Lafayette County, Louisiana" = "Lafayette Parish, Louisiana",
+                        "Livingston County, Louisiana" = "Livingston Parish, Louisiana",
+                        "Madison County, Louisiana" = "Madison Parish, Louisiana",
+                        "Manassas Park County, Virginia" = "Manassas Park, Virginia",
+                        "Manassas County, Virginia" = "Manassas, Virginia",
+                        "Martinsville County, Virginia" = "Martinsville, Virginia",
+                        "Morehouse County, Louisiana" = "Morehouse Parish, Louisiana",
+                        "Natchitoches County, Louisiana" = "Natchitoches Parish, Louisiana",
+                        "Newport News County, Virginia" = "Newport News, Virginia",
+                        "Norfolk County, Virginia" = "Norfolk, Virginia",
+                        "Norton County, Virginia" = "Norton, Virginia",
+                        "Orleans County, Louisiana" = "Orleans Parish, Louisiana",
+                        "Ouachita County, Louisiana" = "Ouachita Parish, Louisiana",
+                        "Petersburg County, Virginia" = "Petersburg, Virginia",
+                        "Plaquemines County, Louisiana" = "Plaquemines Parish, Louisiana",
+                        "Pointe Coupee County, Louisiana" = "Pointe Coupee Parish, Louisiana",
+                        "Poquoson County, Virginia" = "Poquoson, Virginia",
+                        "Portsmouth County, Virginia" = "Portsmouth, Virginia",
+                        "Rapides County, Louisiana" = "Rapides Parish, Louisiana",
+                        "Richland County, Louisiana" = "Richland Parish, Louisiana",
+                        "Richmond County, Virginia" = "Richmond, Virginia",
+                        "Roanoke County, Virginia" = "Roanoke, Virginia",
+                        "Sabine County, Louisiana" = "Sabine Parish, Louisiana",
+                        "Salem County, Virginia" = "Salem, Virginia",
+                        "St. Bernard County, Louisiana" = "St. Bernard Parish, Louisiana",
+                        "St. Charles County, Louisiana" = "St. Charles Parish, Louisiana",
+                        "St. James County, Louisiana" = "St. James Parish, Louisiana",
+                        "Saint Louis County, Minnesota" = "St. Louis County, Minnesota",
+                        "St. Louis County County, Missouri" = "St. Louis County, Missouri",
+                        "St. Louis City County, Missouri" = "St. Louis, Missouri",
+                        "St. Martin County, Louisiana" = "St. Martin Parish, Louisiana",
+                        "St. Mary County, Louisiana" = "St. Mary Parish, Louisiana",
+                        "Staunton County, Virginia" = "Staunton, Virginia",
+                        "Suffolk County, Virginia" = "Suffolk, Virginia",
+                        "Terrebonne County, Louisiana" = "Terrebonne Parish, Louisiana",
+                        "Union County, Louisiana" = "Union Parish, Louisiana",
+                        "Vermilion County, Louisiana" = "Vermilion Parish, Louisiana",
+                        "Vernon County, Louisiana" = "Vernon Parish, Louisiana",
+                        "Virginia Beach County, Virginia" = "Virginia Beach, Virginia",
+                        "Washington County, Louisiana" = "Washington Parish, Louisiana",
+                        "Waynesboro County, Virginia" = "Waynesboro, Virginia",
+                        "Webster County, Louisiana" = "Webster Parish, Louisiana",
+                        "West Baton Rouge County, Louisiana" = "West Baton Rouge Parish, Louisiana",
+                        "West Carroll County, Louisiana" = "West Carroll Parish, Louisiana",
+                        "Winchester County, Virginia" = "Winchester, Virginia")
+
+president_data = read_csv(here("Data", "countypres_2000-2016.csv")) %>% mutate(NAME = paste0(county, " County, ", state) %>% sapply(dict_swap, dict_list = pres_count_convs), prop_votes = candidatevotes / totalvotes, party = party %>% ifelse(is.na(.) | . == "green", "other", .), party_year = paste0(party, "_", year)) %>% select(NAME, prop_votes, party_year) %>% group_by(NAME, party_year) %>% summarise(prop_votes = sum(prop_votes, na.rm = TRUE)) %>% pivot_wider(id_cols = "NAME", names_from = "party_year", values_from = "prop_votes")
 
 merged_data = google_covid_data %>% left_join(acs_18_vals) %>% left_join(president_data) %>% select(-NAME, -GEOID)
 
