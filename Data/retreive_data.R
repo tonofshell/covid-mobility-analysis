@@ -12,7 +12,15 @@ nest_data = function(x) {
   list("data" = x %>% as_tibble() %>% mutate_all(as.character) )
 }
 
-google_covid_data = google_covid_json %>% lapply(nest_data) %>% as_tibble(.name_repair = "unique") %>% pivot_longer(everything()) %>% mutate(name = str_remove_all(name, "\\.")) %>% rename("id" = name) %>% unnest(value) %>% mutate_at(vars("id", "page", "change", "changecalc", "value"), as.numeric) %>% mutate(date = ymd(date)) %>% mutate(NAME = paste(county, state, sep = ", ")) %>% filter(state != "US")
+google_covid_data = google_covid_json %>% 
+  lapply(nest_data) %>% 
+  as_tibble(.name_repair = "unique") %>% 
+  pivot_longer(everything()) %>%
+  mutate(name = str_remove_all(name, "\\.")) %>% 
+  rename("id" = name) %>% unnest(value) %>% 
+  mutate_at(vars("id", "page", "change", "changecalc", "value"), as.numeric) %>% 
+  mutate(date = ymd(date)) %>% mutate(NAME = paste(county, state, sep = ", "), days_passed = date - min(date)) %>% 
+  filter(state != "US")
 
 
 source("api_keys.R")
@@ -27,15 +35,10 @@ if (save_key) {
 acs_18 = get_acs(geography = "county", year = 2018, geometry = TRUE, moe_level = 95,
                  variables = c(total_pop = "B01003_001", pop_white = "B02001_002", 
                                pop_black = "B02001_003", pop_asian = "B02001_005", 
-                               pop_hispanic = "B03001_003", pop_native_amer = "B02001_004", 
-                               pop_not_hisp_white = "B03002_003", pop_not_hisp_black = "B03002_004",
-                               pop_not_hisp_na = "B03002_005", pop_not_hisp_asian = "B03002_006",
-                               pop_not_hisp_nh_pi = "B03002_007", pop_not_hisp_other = "B03002_008",
-                               pop_not_hisp_two_more = "B03002_009",
+                               pop_hispanic = "B03001_003", pop_native_amer = "B02001_004",
                                pop_hisp_white = "B03002_013", pop_hisp_black = "B03002_014",
                                pop_hisp_na = "B03002_015", pop_hisp_asian = "B03002_016",
-                               pop_hisp_nh_pi = "B03002_017", pop_hisp_other = "B03002_018",
-                               pop_hisp_two_more = "B03002_019",
+                               pop_hisp_other = "B03002_018", pop_hisp_two_more = "B03002_019",
                                med_age = "B01002_001", pop_female = "B01001_026", med_income = "B19326_001", 
                                pop_below_poverty ="B17001_002", pop_employed = "B27011_003", 
                                month_housing_costs = "B25105_001", pop_work_out_res_area = "B08008_003", 
