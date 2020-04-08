@@ -40,7 +40,9 @@ set.seed(60615)
 # setup_cl(60615)
 # registerDoParallel(cl, 2)
 
-windowsFonts(`Pragati Narrow` = windowsFont("Pragati Narrow"))
+if (Sys.info()[1] == "Windows") {
+  windowsFonts(`Pragati Narrow` = windowsFont("Pragati Narrow"))
+}
 
 knitr::opts_chunk$set(echo = TRUE, dpi = 200, fig.height = 6, fig.width = 9)
 
