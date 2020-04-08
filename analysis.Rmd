@@ -14,17 +14,37 @@ library(FactoMineR)
 library(factoextra)
 library(mgcv)
 library(glmnet)
+library(pdp)
+library(ICEbox)
 library(ranger)
+library(caret)
 library(ggcorrplot)
 library(extrafont)
 library(tidyverse)
 library(here)
+# library(doParallel)
 
-knitr::opts_chunk$set(echo = TRUE, dpi = 200, fig.height = 6, fig.width = 9)
+set.seed(60615)
+
+# setup_cl = function(seed = round(Sys.time()), num_processes = parallel::detectCores() - 1) {
+#   require(parallel)
+#   if (exists("cl")) {
+#     print("Stopping existing cluster")
+#     try(parallel::stopCluster(cl))
+#   }
+#   assign("cl", parallel::makeCluster(num_processes, outfile = "out.txt"), envir = globalenv())
+#   RNGkind("L'Ecuyer-CMRG")
+#   print(paste("Using", as.numeric(seed), "as parallel RNG seed"))
+#   clusterSetRNGStream(cl, seed)
+# }
+# setup_cl(60615)
+# registerDoParallel(cl, 2)
 
 windowsFonts(`Pragati Narrow` = windowsFont("Pragati Narrow"))
 
-merged_data = readRDS(here("Data", "covid_demo_data.rds")) %>% mutate_at(vars("family_density", "hu_density", "land_area", "pop_density"), as.numeric) %>% mutate_if(is.character, factor)
+knitr::opts_chunk$set(echo = TRUE, dpi = 200, fig.height = 6, fig.width = 9)
+
+merged_data = readRDS(here("Data", "covid_demo_data.rds")) %>% mutate_at(vars("family_density", "hu_density", "land_area", "pop_density"), as.numeric) %>% mutate_if(is.character, factor) %>% filter(state != "US")
 ```
 
 ## Descriptive Statistics
@@ -54,9 +74,63 @@ merged_data %>% select(category, date, value) %>% group_by(category, date) %>% s
 
 ## Models
 
+```{r ml-helper-functions}
+calc_accuracy = function(test_data_set, predict_vals, y_var, mse = FALSE) {
+  if (mse) {
+    print("Calculating MSE")
+    return(predict_vals %>% na.omit() %>% as.numeric() %>% (function(x) x - test_data_set[[y_var]]) %>% (function(x) x^2) %>% mean())
+  }
+  print("Calculating Accuracy")
+  return(as.logical((predict_vals == test_data_set[[y_var]])) %>% na.omit() %>% as.numeric() %>% sum() %>% (function(x) x / length(test_data_set[[y_var]])))
+}
+
+ice_plot = function(variable_name, mod_w_probs, training_data, y_var) {
+  ice_obj = ice(mod_w_probs, as.data.frame(training_data) %>% select(-y_var), predictor = variable_name, predictfcn = function(object, newdata){return(predict(object, newdata)$predictions %>% as_tibble() %>% lapply(1:nrow(.), function(i, x) max(x[i,]), .) %>% unlist())})
+  return(ice_obj)
+}
+
+pdp_plot = function(v_name, mod, train_dat) {
+  return(pdp::partial(mod, train = train_dat, pred.var = v_name, type = "classification", plot = TRUE, rug = TRUE, 
+        plot.engine = "ggplot2"))
+}
+```
+
 ### Random Forest
 
-```{r rf-model}
+#### All Mobility
 
+```{r all-data}
+all_indices = createDataPartition(merged_data$value, 0.75)[[1]]
+all_training = merged_data %>% select(-c(id, category, page, change, changecalc, geometry)) %>% .[all_indices, ]
+all_testing = merged_data %>% select(-c(id, category, page, change, changecalc, geometry)) %>% .[-all_indices, ]
+```
+
+
+```{r rf-model-all}
+rf_all_imp = na.omit(all_training) %>% ranger(value ~ ., ., importance = "impurity_corrected", num.threads = 6)
+# best to build another model without importance for prediction
+rf_all = na.omit(all_training) %>% ranger(value ~ ., ., num.threads = 6)
+#rf_all_prob = na.omit(all_training) %>% ranger(value ~ ., ., probability = TRUE, num.threads = 6)
+```
+
+```{r rf-all-stats}
+all_predictions = predict(rf_all, na.omit(all_testing))$predictions
+all_testing %>% na.omit() %>% calc_accuracy(all_predictions, "value")
+
+rf_all_imp_values = importance_pvalues(rf_all_imp, method = "altmann", formula = value ~ ., data = na.omit(all_training)) %>% as_tibble(rownames = "variable") %>% arrange(-importance)
+
+rf_all_imp_values %>% kable() %>% kable_styling(c("condensed", "striped", "responsive"))
+```
+
+```{r rf-all-viz, eval=FALSE, fig.height=12, fig.width=15, message=FALSE, warning=FALSE, include=FALSE}
+rf_all_ice_objs = rf_all_imp_values$variable %>% lapply(ice_plot, rf_all_prob, na.omit(all_training), "value")
+
+par(mfrow = c(4,4))
+for (ice_obj in rf_all_ice_objs) {
+  plot(ice_obj)
+}
+
+rf_all_pdp_plots = rf_all_imp_values$variable %>% lapply(pdp_plot, rf_all_prob, na.omit(all_training))
+do.call(grid.arrange,  rf_all_pdp_plots)
 ```
 
