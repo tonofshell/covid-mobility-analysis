@@ -10,56 +10,31 @@ library(skimr)
 library(kableExtra)
 library(cowpoke) #devtools::install_github("tonofshell/cowpoke")
 library(beachball) #devtools::install_github("tonofshell/beachball")
-library(FactoMineR)
-library(factoextra)
-library(mgcv)
-library(glmnet)
-library(pdp)
-library(ICEbox)
-library(ranger)
-library(caret)
 library(ggcorrplot)
 library(extrafont)
 library(tidyverse)
 library(here)
-# library(doParallel)
-
-set.seed(60615)
-
-# setup_cl = function(seed = round(Sys.time()), num_processes = parallel::detectCores() - 1) {
-#   require(parallel)
-#   if (exists("cl")) {
-#     print("Stopping existing cluster")
-#     try(parallel::stopCluster(cl))
-#   }
-#   assign("cl", parallel::makeCluster(num_processes, outfile = "out.txt"), envir = globalenv())
-#   RNGkind("L'Ecuyer-CMRG")
-#   print(paste("Using", as.numeric(seed), "as parallel RNG seed"))
-#   clusterSetRNGStream(cl, seed)
-# }
-# setup_cl(60615)
-# registerDoParallel(cl, 2)
 
 if (Sys.info()[1] == "Windows") {
   windowsFonts(`Pragati Narrow` = windowsFont("Pragati Narrow"))
 }
 
-knitr::opts_chunk$set(echo = TRUE, dpi = 200, fig.height = 6, fig.width = 9)
+knitr::opts_chunk$set(echo = TRUE, dpi = 200, fig.height = 6, fig.width = 9, cache = TRUE)
 
-merged_data = readRDS(here("Data", "covid_demo_data.rds")) %>% mutate_at(vars("family_density", "hu_density", "land_area", "pop_density"), as.numeric) %>% mutate_if(is.character, factor) %>% filter(state != "US")
+merged_data = readRDS(here("Data", "covid_demo_data.rds")) %>% mutate_at(vars("family_density", "hu_density", "land_area", "pop_density"), as.numeric) %>% mutate_if(is.character, factor) %>% mutate(days_passed = as.numeric(days_passed)) %>% mutate(dem_rep_2000 = democrat_2000 - republican_2000, dem_rep_2004 = democrat_2004 - republican_2004, dem_rep_2008 = democrat_2008 - republican_2008, dem_rep_2012 = democrat_2012 - republican_2012, dem_rep_2016 = democrat_2016 - republican_2016) %>% select(-starts_with("democrat"), -starts_with("republican"), -pop_native_born)
 ```
 
 ## Descriptive Statistics
 ```{r descr-stats}
 descr_stats = merged_data %>% select(-geometry, -id) %>% skim() %>% partition()
 
-descr_stats$factor %>% kable()
-descr_stats$Date %>% kable()
-descr_stats$numeric %>% kable()
+descr_stats$factor %>% mutate_if(is.numeric, format_number) %>% kable()
+descr_stats$Date %>% mutate_if(is.numeric, format_number) %>% kable()
+descr_stats$numeric %>% mutate_if(is.numeric, format_number) %>% kable()
 ```
 
 ```{r cor-plot, fig.width=20, fig.height=20}
-merged_data %>% select(-geometry, -id) %>% mutate_all(as.numeric) %>% {ggcorrplot(cor(., use = "pairwise.complete.obs"), p.mat = cor_pmat(., use = "pairwise.complete.obs"), hc.order = TRUE, insig = "pch", lab = FALSE, colors = color_pal(3, "segmented"))} + theme_day(base_family = "Pragati Narrow", base_size = 18) + theme(axis.text.x = element_text(angle = 45, hjust = 1), axis.title = element_blank())
+merged_data %>% select(-geometry, -id, -date) %>% mutate_all(as.numeric) %>% {ggcorrplot(cor(., use = "pairwise.complete.obs"), p.mat = cor_pmat(., use = "pairwise.complete.obs"), hc.order = TRUE, insig = "pch", lab = FALSE, colors = color_pal(3, "segmented"))} + theme_day(base_family = "Pragati Narrow", base_size = 18) + theme(axis.text.x = element_text(angle = 45, hjust = 1), axis.title = element_blank()) + labs(title = "Correlation Matrix", subtitle = "Correlations with X's are not statistically significant")
 ```
 
 ### Test Plots
@@ -74,65 +49,29 @@ merged_data %>% select(state, date, value) %>% group_by(state, date) %>% summari
 merged_data %>% select(category, date, value) %>% group_by(category, date) %>% summarise(value = mean(value)) %>% ggplot(aes(x = date, y = value, color = category)) + geom_line(size = 1.5) + scale_color_manual(values = color_pal(6)) + theme_day(base_family = "Pragati Narrow", base_size = 18) + labs(title = "Changes in Mobility by Category", subtitle = "Due to COVID-19 outbreak in the US", x = "Date", y = "Mobility Index")
 ```
 
-## Models
+```{r pol-diff}
+merged_data %>% select( state, county, starts_with("dem_rep_20")) %>% distinct() %>% pivot_longer(starts_with("dem_rep_20")) %>% mutate(year = factor(str_sub(name, -4), ordered = TRUE), name = NULL) %>% ggplot(aes(x = value, color = year)) + geom_density(size = 1.5) + scale_color_manual(values = color_pal(5, "continuous")) + theme_day(base_family = "Pragati Narrow", base_size = 18) + labs(title = "Distributions of County Political Party Proportions", subtitle = "Greater positive values mean a higher proportion of Democratic votes", color = "Year", x = "Presidential Party Vote Difference", y = "Density")
+```
 
-```{r ml-helper-functions}
-calc_accuracy = function(test_data_set, predict_vals, y_var, mse = FALSE) {
-  if (mse) {
-    print("Calculating MSE")
-    return(predict_vals %>% na.omit() %>% as.numeric() %>% (function(x) x - test_data_set[[y_var]]) %>% (function(x) x^2) %>% mean())
-  }
-  print("Calculating Accuracy")
-  return(as.logical((predict_vals == test_data_set[[y_var]])) %>% na.omit() %>% as.numeric() %>% sum() %>% (function(x) x / length(test_data_set[[y_var]])))
-}
+## Predicting Areas Staying Home
 
-ice_plot = function(variable_name, mod_w_probs, training_data, y_var) {
-  ice_obj = ice(mod_w_probs, as.data.frame(training_data) %>% select(-y_var), predictor = variable_name, predictfcn = function(object, newdata){return(predict(object, newdata)$predictions %>% as_tibble() %>% lapply(1:nrow(.), function(i, x) max(x[i,]), .) %>% unlist())})
-  return(ice_obj)
-}
-
-pdp_plot = function(v_name, mod, train_dat) {
-  return(pdp::partial(mod, train = train_dat, pred.var = v_name, type = "classification", plot = TRUE, rug = TRUE, 
-        plot.engine = "ggplot2"))
-}
+### PCA
+```{r home-pca, fig.height=10, fig.width=10}
+readRDS(here("Results", "home_pca_biplot.rds"))
 ```
 
 ### Random Forest
-
-#### All Mobility
-
-```{r all-data}
-all_indices = createDataPartition(merged_data$value, 0.75)[[1]]
-all_training = merged_data %>% select(-c(id, category, page, change, changecalc, geometry)) %>% .[all_indices, ]
-all_testing = merged_data %>% select(-c(id, category, page, change, changecalc, geometry)) %>% .[-all_indices, ]
+```{r home-rf-imp}
+readRDS(here("Results", "rf_home_imp_values.rds")) %>% filter(importance > 0) %>% mutate_if(is.numeric, format_number) %>% kable()
 ```
 
+```{r home-rf-ice}
+rf_home_ice_objs = readRDS(here("Results", "rf_home_ice_objs.rds"))
 
-```{r rf-model-all}
-rf_all_imp = na.omit(all_training) %>% ranger(value ~ ., ., importance = "impurity_corrected", num.threads = 6)
-# best to build another model without importance for prediction
-rf_all = na.omit(all_training) %>% ranger(value ~ ., ., num.threads = 6)
-#rf_all_prob = na.omit(all_training) %>% ranger(value ~ ., ., probability = TRUE, num.threads = 6)
-```
-
-```{r rf-all-stats}
-all_predictions = predict(rf_all, na.omit(all_testing))$predictions
-all_testing %>% na.omit() %>% calc_accuracy(all_predictions, "value")
-
-rf_all_imp_values = importance_pvalues(rf_all_imp, method = "altmann", formula = value ~ ., data = na.omit(all_training)) %>% as_tibble(rownames = "variable") %>% arrange(-importance)
-
-rf_all_imp_values %>% kable() %>% kable_styling(c("condensed", "striped", "responsive"))
-```
-
-```{r rf-all-viz, eval=FALSE, fig.height=12, fig.width=15, message=FALSE, warning=FALSE, include=FALSE}
-rf_all_ice_objs = rf_all_imp_values$variable %>% lapply(ice_plot, rf_all_prob, na.omit(all_training), "value")
-
-par(mfrow = c(4,4))
-for (ice_obj in rf_all_ice_objs) {
+par(mfrow = c(2,3))
+for (ice_obj in rf_home_ice_objs) {
   plot(ice_obj)
 }
-
-rf_all_pdp_plots = rf_all_imp_values$variable %>% lapply(pdp_plot, rf_all_prob, na.omit(all_training))
-do.call(grid.arrange,  rf_all_pdp_plots)
 ```
+
 

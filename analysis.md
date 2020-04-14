@@ -8,7 +8,7 @@ Adam Shelton
 ``` r
 descr_stats = merged_data %>% select(-geometry, -id) %>% skim() %>% partition()
 
-descr_stats$factor %>% kable()
+descr_stats$factor %>% mutate_if(is.numeric, format_number) %>% kable()
 ```
 
 <table>
@@ -23,13 +23,13 @@ skim\_variable
 
 </th>
 
-<th style="text-align:right;">
+<th style="text-align:left;">
 
 n\_missing
 
 </th>
 
-<th style="text-align:right;">
+<th style="text-align:left;">
 
 complete\_rate
 
@@ -41,7 +41,7 @@ ordered
 
 </th>
 
-<th style="text-align:right;">
+<th style="text-align:left;">
 
 n\_unique
 
@@ -67,13 +67,13 @@ state
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
 0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
 1
 
@@ -85,15 +85,15 @@ FALSE
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-51
+50
 
 </td>
 
 <td style="text-align:left;">
 
-Tex: 21925, Geo: 13882, US: 13150, Ohi: 12009
+Tex: 21925, Geo: 13882, Ohi: 12009, Vir: 11949
 
 </td>
 
@@ -107,13 +107,13 @@ county
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
 0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
 1
 
@@ -125,9 +125,9 @@ FALSE
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1270
+1,219
 
 </td>
 
@@ -147,13 +147,13 @@ category
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
 0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
 1
 
@@ -165,7 +165,7 @@ FALSE
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
 6
 
@@ -173,7 +173,8 @@ FALSE
 
 <td style="text-align:left;">
 
-ret: 77318, gro: 74859, wor: 67077, tra: 30982
+ret: 75125, gro: 72668, wor: 64886, tra:
+28791
 
 </td>
 
@@ -184,7 +185,7 @@ ret: 77318, gro: 74859, wor: 67077, tra: 30982
 </table>
 
 ``` r
-descr_stats$Date %>% kable()
+descr_stats$Date %>% mutate_if(is.numeric, format_number) %>% kable()
 ```
 
 <table>
@@ -199,13 +200,13 @@ skim\_variable
 
 </th>
 
-<th style="text-align:right;">
+<th style="text-align:left;">
 
 n\_missing
 
 </th>
 
-<th style="text-align:right;">
+<th style="text-align:left;">
 
 complete\_rate
 
@@ -229,7 +230,7 @@ median
 
 </th>
 
-<th style="text-align:right;">
+<th style="text-align:left;">
 
 n\_unique
 
@@ -249,13 +250,13 @@ date
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
 0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
 1
 
@@ -279,7 +280,7 @@ date
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
 43
 
@@ -292,7 +293,7 @@ date
 </table>
 
 ``` r
-descr_stats$numeric %>% kable()
+descr_stats$numeric %>% mutate_if(is.numeric, format_number) %>% kable()
 ```
 
 <table>
@@ -307,55 +308,55 @@ skim\_variable
 
 </th>
 
-<th style="text-align:right;">
+<th style="text-align:left;">
 
 n\_missing
 
 </th>
 
-<th style="text-align:right;">
+<th style="text-align:left;">
 
 complete\_rate
 
 </th>
 
-<th style="text-align:right;">
+<th style="text-align:left;">
 
 mean
 
 </th>
 
-<th style="text-align:right;">
+<th style="text-align:left;">
 
 sd
 
 </th>
 
-<th style="text-align:right;">
+<th style="text-align:left;">
 
 p0
 
 </th>
 
-<th style="text-align:right;">
+<th style="text-align:left;">
 
 p25
 
 </th>
 
-<th style="text-align:right;">
+<th style="text-align:left;">
 
 p50
 
 </th>
 
-<th style="text-align:right;">
+<th style="text-align:left;">
 
 p75
 
 </th>
 
-<th style="text-align:right;">
+<th style="text-align:left;">
 
 p100
 
@@ -381,57 +382,57 @@ page
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
 0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-2.211244e+01
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.862806e+01
-
-</td>
-
-<td style="text-align:right;">
-
-2.0000000
+22.5
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-8.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-18.0000000
+18.9
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-3.000000e+01
+2
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.090000e+02
+8
+
+</td>
+
+<td style="text-align:left;">
+
+18
+
+</td>
+
+<td style="text-align:left;">
+
+31
+
+</td>
+
+<td style="text-align:left;">
+
+109
 
 </td>
 
@@ -451,63 +452,63 @@ change
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
 0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-\-2.417671e+01
-
-</td>
-
-<td style="text-align:right;">
-
-2.323282e+01
-
-</td>
-
-<td style="text-align:right;">
-
-\-100.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-\-38.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-\-27.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-\-1.300000e+01
-
-</td>
-
-<td style="text-align:right;">
-
-1.670000e+02
+1
 
 </td>
 
 <td style="text-align:left;">
 
-▂▇▁▁▁
+\-24.284
+
+</td>
+
+<td style="text-align:left;">
+
+22.7
+
+</td>
+
+<td style="text-align:left;">
+
+\-100
+
+</td>
+
+<td style="text-align:left;">
+
+\-38
+
+</td>
+
+<td style="text-align:left;">
+
+\-27
+
+</td>
+
+<td style="text-align:left;">
+
+\-13
+
+</td>
+
+<td style="text-align:left;">
+
+167
+
+</td>
+
+<td style="text-align:left;">
+
+▁▇▁▁▁
 
 </td>
 
@@ -521,63 +522,63 @@ changecalc
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
 0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-\-2.518706e+01
-
-</td>
-
-<td style="text-align:right;">
-
-2.419813e+01
-
-</td>
-
-<td style="text-align:right;">
-
-\-104.1666667
-
-</td>
-
-<td style="text-align:right;">
-
-\-39.4417450
-
-</td>
-
-<td style="text-align:right;">
-
-\-28.4090933
-
-</td>
-
-<td style="text-align:right;">
-
-\-1.345009e+01
-
-</td>
-
-<td style="text-align:right;">
-
-1.736111e+02
+1
 
 </td>
 
 <td style="text-align:left;">
 
-▂▇▁▁▁
+\-25.298
+
+</td>
+
+<td style="text-align:left;">
+
+23.7
+
+</td>
+
+<td style="text-align:left;">
+
+\-104.167
+
+</td>
+
+<td style="text-align:left;">
+
+\-39.291
+
+</td>
+
+<td style="text-align:left;">
+
+\-28.271
+
+</td>
+
+<td style="text-align:left;">
+
+\-13.686
+
+</td>
+
+<td style="text-align:left;">
+
+174
+
+</td>
+
+<td style="text-align:left;">
+
+▁▇▁▁▁
 
 </td>
 
@@ -591,57 +592,57 @@ value
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
 0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-\-6.756340e-01
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-2.130454e+01
-
-</td>
-
-<td style="text-align:right;">
-
-\-104.1670000
+\-0.697
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-\-8.3590000
-
-</td>
-
-<td style="text-align:right;">
-
-1.9115000
+21.2
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-9.637000e+00
+\-104.167
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-3.209300e+02
+\-8.483
+
+</td>
+
+<td style="text-align:left;">
+
+1.92
+
+</td>
+
+<td style="text-align:left;">
+
+9.68
+
+</td>
+
+<td style="text-align:left;">
+
+321
 
 </td>
 
@@ -657,67 +658,137 @@ value
 
 <td style="text-align:left;">
 
-pop\_female
-
-</td>
-
-<td style="text-align:right;">
-
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
-
-</td>
-
-<td style="text-align:right;">
-
-5.032908e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.745410e-02
-
-</td>
-
-<td style="text-align:right;">
-
-0.3338906
-
-</td>
-
-<td style="text-align:right;">
-
-0.4985429
-
-</td>
-
-<td style="text-align:right;">
-
-0.5062139
-
-</td>
-
-<td style="text-align:right;">
-
-5.124868e-01
-
-</td>
-
-<td style="text-align:right;">
-
-5.503806e-01
+days\_passed
 
 </td>
 
 <td style="text-align:left;">
 
-▁▁▁▇▇
+0
+
+</td>
+
+<td style="text-align:left;">
+
+1
+
+</td>
+
+<td style="text-align:left;">
+
+21.1
+
+</td>
+
+<td style="text-align:left;">
+
+12.4
+
+</td>
+
+<td style="text-align:left;">
+
+0
+
+</td>
+
+<td style="text-align:left;">
+
+10
+
+</td>
+
+<td style="text-align:left;">
+
+21
+
+</td>
+
+<td style="text-align:left;">
+
+32
+
+</td>
+
+<td style="text-align:left;">
+
+42
+
+</td>
+
+<td style="text-align:left;">
+
+▇▇▇▇▇
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_female
+
+</td>
+
+<td style="text-align:left;">
+
+0
+
+</td>
+
+<td style="text-align:left;">
+
+1
+
+</td>
+
+<td style="text-align:left;">
+
+0.504
+
+</td>
+
+<td style="text-align:left;">
+
+0.018
+
+</td>
+
+<td style="text-align:left;">
+
+0.334
+
+</td>
+
+<td style="text-align:left;">
+
+0.499
+
+</td>
+
+<td style="text-align:left;">
+
+0.506
+
+</td>
+
+<td style="text-align:left;">
+
+0.513
+
+</td>
+
+<td style="text-align:left;">
+
+0.56
+
+</td>
+
+<td style="text-align:left;">
+
+▁▁▁▇▂
 
 </td>
 
@@ -731,57 +802,57 @@ med\_age
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-3.998955e+01
-
-</td>
-
-<td style="text-align:right;">
-
-4.910213e+00
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-23.4000000
-
-</td>
-
-<td style="text-align:right;">
-
-37.0000000
+39.9
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-39.9000000
-
-</td>
-
-<td style="text-align:right;">
-
-4.270000e+01
+4.91
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-6.700000e+01
+23.4
+
+</td>
+
+<td style="text-align:left;">
+
+36.9
+
+</td>
+
+<td style="text-align:left;">
+
+39.8
+
+</td>
+
+<td style="text-align:left;">
+
+42.6
+
+</td>
+
+<td style="text-align:left;">
+
+67
 
 </td>
 
@@ -801,57 +872,57 @@ total\_pop
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-2.146984e+05
-
-</td>
-
-<td style="text-align:right;">
-
-5.029253e+05
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1605.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-28928.0000000
+213,428
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-58477.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-1.970080e+05
+498,616
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.009805e+07
+1,605
+
+</td>
+
+<td style="text-align:left;">
+
+28,645
+
+</td>
+
+<td style="text-align:left;">
+
+58,538
+
+</td>
+
+<td style="text-align:left;">
+
+197,661
+
+</td>
+
+<td style="text-align:left;">
+
+10,098,052
 
 </td>
 
@@ -871,57 +942,57 @@ pop\_white
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-8.146528e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.528040e-01
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.1587593
-
-</td>
-
-<td style="text-align:right;">
-
-0.7430041
+0.811
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.8674380
-
-</td>
-
-<td style="text-align:right;">
-
-9.314013e-01
+0.156
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-9.945276e-01
+0.159
+
+</td>
+
+<td style="text-align:left;">
+
+0.732
+
+</td>
+
+<td style="text-align:left;">
+
+0.864
+
+</td>
+
+<td style="text-align:left;">
+
+0.93
+
+</td>
+
+<td style="text-align:left;">
+
+0.995
 
 </td>
 
@@ -941,57 +1012,57 @@ pop\_black
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.002666e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.343909e-01
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0123136
+0.104
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0425570
-
-</td>
-
-<td style="text-align:right;">
-
-1.264625e-01
+0.139
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-8.260733e-01
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0.013
+
+</td>
+
+<td style="text-align:left;">
+
+0.044
+
+</td>
+
+<td style="text-align:left;">
+
+0.132
+
+</td>
+
+<td style="text-align:left;">
+
+0.826
 
 </td>
 
@@ -1011,57 +1082,57 @@ pop\_native\_amer
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.141450e-02
-
-</td>
-
-<td style="text-align:right;">
-
-3.605690e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0019061
+0.011
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0034937
-
-</td>
-
-<td style="text-align:right;">
-
-6.973900e-03
+0.036
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-6.511424e-01
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0.002
+
+</td>
+
+<td style="text-align:left;">
+
+0.003
+
+</td>
+
+<td style="text-align:left;">
+
+0.007
+
+</td>
+
+<td style="text-align:left;">
+
+0.651
 
 </td>
 
@@ -1081,57 +1152,57 @@ pop\_asian
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-2.128030e-02
-
-</td>
-
-<td style="text-align:right;">
-
-3.672500e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0050077
+0.022
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0100497
-
-</td>
-
-<td style="text-align:right;">
-
-2.301580e-02
+0.037
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-4.251072e-01
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0.005
+
+</td>
+
+<td style="text-align:left;">
+
+0.01
+
+</td>
+
+<td style="text-align:left;">
+
+0.024
+
+</td>
+
+<td style="text-align:left;">
+
+0.425
 
 </td>
 
@@ -1151,547 +1222,57 @@ pop\_hispanic
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
-
-</td>
-
-<td style="text-align:right;">
-
-1.097607e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.448708e-01
-
-</td>
-
-<td style="text-align:right;">
-
-0.0010945
-
-</td>
-
-<td style="text-align:right;">
-
-0.0266838
-
-</td>
-
-<td style="text-align:right;">
-
-0.0547423
-
-</td>
-
-<td style="text-align:right;">
-
-1.265328e-01
-
-</td>
-
-<td style="text-align:right;">
-
-9.906877e-01
+0
 
 </td>
 
 <td style="text-align:left;">
 
-▇▁▁▁▁
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-pop\_not\_hisp\_white
-
-</td>
-
-<td style="text-align:right;">
-
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
-
-</td>
-
-<td style="text-align:right;">
-
-7.376609e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.955944e-01
-
-</td>
-
-<td style="text-align:right;">
-
-0.0072777
-
-</td>
-
-<td style="text-align:right;">
-
-0.6216551
-
-</td>
-
-<td style="text-align:right;">
-
-0.7883597
-
-</td>
-
-<td style="text-align:right;">
-
-8.979231e-01
-
-</td>
-
-<td style="text-align:right;">
-
-9.939585e-01
+1
 
 </td>
 
 <td style="text-align:left;">
 
-▁▁▂▅▇
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-pop\_not\_hisp\_black
-
-</td>
-
-<td style="text-align:right;">
-
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
-
-</td>
-
-<td style="text-align:right;">
-
-9.831580e-02
-
-</td>
-
-<td style="text-align:right;">
-
-1.335721e-01
-
-</td>
-
-<td style="text-align:right;">
-
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0115207
-
-</td>
-
-<td style="text-align:right;">
-
-0.0407724
-
-</td>
-
-<td style="text-align:right;">
-
-1.237288e-01
-
-</td>
-
-<td style="text-align:right;">
-
-8.178335e-01
+0.11
 
 </td>
 
 <td style="text-align:left;">
 
-▇▁▁▁▁
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-pop\_not\_hisp\_na
-
-</td>
-
-<td style="text-align:right;">
-
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
-
-</td>
-
-<td style="text-align:right;">
-
-1.003760e-02
-
-</td>
-
-<td style="text-align:right;">
-
-3.471200e-02
-
-</td>
-
-<td style="text-align:right;">
-
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0013824
-
-</td>
-
-<td style="text-align:right;">
-
-0.0026070
-
-</td>
-
-<td style="text-align:right;">
-
-5.190000e-03
-
-</td>
-
-<td style="text-align:right;">
-
-6.446456e-01
+0.145
 
 </td>
 
 <td style="text-align:left;">
 
-▇▁▁▁▁
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-pop\_not\_hisp\_asian
-
-</td>
-
-<td style="text-align:right;">
-
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
-
-</td>
-
-<td style="text-align:right;">
-
-2.096490e-02
-
-</td>
-
-<td style="text-align:right;">
-
-3.620050e-02
-
-</td>
-
-<td style="text-align:right;">
-
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0048976
-
-</td>
-
-<td style="text-align:right;">
-
-0.0097685
-
-</td>
-
-<td style="text-align:right;">
-
-2.274790e-02
-
-</td>
-
-<td style="text-align:right;">
-
-4.148463e-01
+0.001
 
 </td>
 
 <td style="text-align:left;">
 
-▇▁▁▁▁
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-pop\_not\_hisp\_nh\_pi
-
-</td>
-
-<td style="text-align:right;">
-
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
-
-</td>
-
-<td style="text-align:right;">
-
-1.068400e-03
-
-</td>
-
-<td style="text-align:right;">
-
-5.965100e-03
-
-</td>
-
-<td style="text-align:right;">
-
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0002458
-
-</td>
-
-<td style="text-align:right;">
-
-6.801000e-04
-
-</td>
-
-<td style="text-align:right;">
-
-1.116170e-01
+0.027
 
 </td>
 
 <td style="text-align:left;">
 
-▇▁▁▁▁
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-pop\_not\_hisp\_other
-
-</td>
-
-<td style="text-align:right;">
-
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
-
-</td>
-
-<td style="text-align:right;">
-
-1.379000e-03
-
-</td>
-
-<td style="text-align:right;">
-
-1.857600e-03
-
-</td>
-
-<td style="text-align:right;">
-
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0002505
-
-</td>
-
-<td style="text-align:right;">
-
-0.0009076
-
-</td>
-
-<td style="text-align:right;">
-
-1.871300e-03
-
-</td>
-
-<td style="text-align:right;">
-
-2.925230e-02
+0.055
 
 </td>
 
 <td style="text-align:left;">
 
-▇▁▁▁▁
+0.125
 
 </td>
-
-</tr>
-
-<tr>
 
 <td style="text-align:left;">
 
-pop\_not\_hisp\_two\_more
-
-</td>
-
-<td style="text-align:right;">
-
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
-
-</td>
-
-<td style="text-align:right;">
-
-2.081260e-02
-
-</td>
-
-<td style="text-align:right;">
-
-1.627490e-02
-
-</td>
-
-<td style="text-align:right;">
-
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0130384
-
-</td>
-
-<td style="text-align:right;">
-
-0.0177549
-
-</td>
-
-<td style="text-align:right;">
-
-2.423970e-02
-
-</td>
-
-<td style="text-align:right;">
-
-2.330136e-01
+0.991
 
 </td>
 
@@ -1711,57 +1292,57 @@ pop\_hisp\_white
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-7.699180e-02
-
-</td>
-
-<td style="text-align:right;">
-
-1.168838e-01
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0170102
+0.077
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0334041
-
-</td>
-
-<td style="text-align:right;">
-
-8.209270e-02
+0.117
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-9.435315e-01
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0.017
+
+</td>
+
+<td style="text-align:left;">
+
+0.034
+
+</td>
+
+<td style="text-align:left;">
+
+0.081
+
+</td>
+
+<td style="text-align:left;">
+
+0.944
 
 </td>
 
@@ -1781,57 +1362,57 @@ pop\_hisp\_black
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.950800e-03
-
-</td>
-
-<td style="text-align:right;">
-
-3.143800e-03
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0002242
+0.002
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0009899
-
-</td>
-
-<td style="text-align:right;">
-
-2.411300e-03
+0.003
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-4.836870e-02
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0.001
+
+</td>
+
+<td style="text-align:left;">
+
+0.003
+
+</td>
+
+<td style="text-align:left;">
+
+0.048
 
 </td>
 
@@ -1851,57 +1432,57 @@ pop\_hisp\_na
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.376900e-03
-
-</td>
-
-<td style="text-align:right;">
-
-2.761600e-03
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0000263
+0.001
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0004897
-
-</td>
-
-<td style="text-align:right;">
-
-1.501900e-03
+0.003
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-3.269590e-02
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0.001
+
+</td>
+
+<td style="text-align:left;">
+
+0.033
 
 </td>
 
@@ -1921,127 +1502,57 @@ pop\_hisp\_asian
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
-
-</td>
-
-<td style="text-align:right;">
-
-3.154000e-04
-
-</td>
-
-<td style="text-align:right;">
-
-8.786000e-04
-
-</td>
-
-<td style="text-align:right;">
-
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0000465
-
-</td>
-
-<td style="text-align:right;">
-
-3.381000e-04
-
-</td>
-
-<td style="text-align:right;">
-
-1.833920e-02
+0
 
 </td>
 
 <td style="text-align:left;">
 
-▇▁▁▁▁
+1
 
 </td>
-
-</tr>
-
-<tr>
 
 <td style="text-align:left;">
 
-pop\_hisp\_nh\_pi
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0.001
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.219000e-04
-
-</td>
-
-<td style="text-align:right;">
-
-6.150000e-04
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0000000
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-8.730000e-05
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.284040e-02
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0.018
 
 </td>
 
@@ -2061,57 +1572,57 @@ pop\_hisp\_other
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-2.360380e-02
-
-</td>
-
-<td style="text-align:right;">
-
-3.777370e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0043354
+0.024
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0112868
-
-</td>
-
-<td style="text-align:right;">
-
-2.589830e-02
+0.038
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-5.700959e-01
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0.004
+
+</td>
+
+<td style="text-align:left;">
+
+0.011
+
+</td>
+
+<td style="text-align:left;">
+
+0.026
+
+</td>
+
+<td style="text-align:left;">
+
+0.57
 
 </td>
 
@@ -2131,57 +1642,57 @@ pop\_hisp\_two\_more
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-5.400000e-03
-
-</td>
-
-<td style="text-align:right;">
-
-6.360900e-03
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0014387
+0.005
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0033653
-
-</td>
-
-<td style="text-align:right;">
-
-7.046600e-03
+0.006
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-6.592490e-02
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0.001
+
+</td>
+
+<td style="text-align:left;">
+
+0.003
+
+</td>
+
+<td style="text-align:left;">
+
+0.007
+
+</td>
+
+<td style="text-align:left;">
+
+0.066
 
 </td>
 
@@ -2201,57 +1712,57 @@ pop\_geo\_mobility
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18706
-
-</td>
-
-<td style="text-align:right;">
-
-0.9363837
+127
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-9.888403e-01
-
-</td>
-
-<td style="text-align:right;">
-
-2.893000e-03
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.9709951
-
-</td>
-
-<td style="text-align:right;">
-
-0.9872961
+0.989
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.9889675
-
-</td>
-
-<td style="text-align:right;">
-
-9.906492e-01
+0.003
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-9.976222e-01
+0.971
+
+</td>
+
+<td style="text-align:left;">
+
+0.987
+
+</td>
+
+<td style="text-align:left;">
+
+0.989
+
+</td>
+
+<td style="text-align:left;">
+
+0.991
+
+</td>
+
+<td style="text-align:left;">
+
+0.998
 
 </td>
 
@@ -2271,57 +1782,57 @@ pop\_commute\_drove
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18706
-
-</td>
-
-<td style="text-align:right;">
-
-0.9363837
+127
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-3.980432e-01
-
-</td>
-
-<td style="text-align:right;">
-
-5.062500e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0428324
-
-</td>
-
-<td style="text-align:right;">
-
-0.3684827
+0.398
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.4022116
-
-</td>
-
-<td style="text-align:right;">
-
-4.344404e-01
+0.05
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-5.267549e-01
+0.043
+
+</td>
+
+<td style="text-align:left;">
+
+0.369
+
+</td>
+
+<td style="text-align:left;">
+
+0.402
+
+</td>
+
+<td style="text-align:left;">
+
+0.434
+
+</td>
+
+<td style="text-align:left;">
+
+0.527
 
 </td>
 
@@ -2341,57 +1852,57 @@ pop\_commute\_pub\_trans
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18706
-
-</td>
-
-<td style="text-align:right;">
-
-0.9363837
+127
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-7.002000e-03
-
-</td>
-
-<td style="text-align:right;">
-
-2.066420e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0007630
+0.007
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0019252
-
-</td>
-
-<td style="text-align:right;">
-
-4.908000e-03
+0.021
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-3.196223e-01
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0.001
+
+</td>
+
+<td style="text-align:left;">
+
+0.002
+
+</td>
+
+<td style="text-align:left;">
+
+0.005
+
+</td>
+
+<td style="text-align:left;">
+
+0.32
 
 </td>
 
@@ -2411,57 +1922,57 @@ pop\_commute\_bike
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18706
-
-</td>
-
-<td style="text-align:right;">
-
-0.9363837
+127
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.777600e-03
-
-</td>
-
-<td style="text-align:right;">
-
-3.278000e-03
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0002688
+0.002
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0008790
-
-</td>
-
-<td style="text-align:right;">
-
-1.906800e-03
+0.003
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-3.525430e-02
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0.001
+
+</td>
+
+<td style="text-align:left;">
+
+0.002
+
+</td>
+
+<td style="text-align:left;">
+
+0.035
 
 </td>
 
@@ -2481,57 +1992,57 @@ pop\_commute\_walk
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18706
-
-</td>
-
-<td style="text-align:right;">
-
-0.9363837
+127
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.088100e-02
-
-</td>
-
-<td style="text-align:right;">
-
-9.171100e-03
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0053672
+0.011
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0085285
-
-</td>
-
-<td style="text-align:right;">
-
-1.353360e-02
+0.009
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.093379e-01
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0.005
+
+</td>
+
+<td style="text-align:left;">
+
+0.009
+
+</td>
+
+<td style="text-align:left;">
+
+0.014
+
+</td>
+
+<td style="text-align:left;">
+
+0.109
 
 </td>
 
@@ -2551,57 +2062,57 @@ pop\_commute\_none
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18706
-
-</td>
-
-<td style="text-align:right;">
-
-0.9363837
+127
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-2.008080e-02
-
-</td>
-
-<td style="text-align:right;">
-
-1.079980e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0129190
+0.02
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0184833
-
-</td>
-
-<td style="text-align:right;">
-
-2.522490e-02
+0.011
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.971766e-01
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0.013
+
+</td>
+
+<td style="text-align:left;">
+
+0.018
+
+</td>
+
+<td style="text-align:left;">
+
+0.025
+
+</td>
+
+<td style="text-align:left;">
+
+0.197
 
 </td>
 
@@ -2621,57 +2132,57 @@ pop\_work\_out\_res\_area
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18706
-
-</td>
-
-<td style="text-align:right;">
-
-0.9363837
+127
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.140129e-01
-
-</td>
-
-<td style="text-align:right;">
-
-8.329880e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0537005
+0.116
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0906736
-
-</td>
-
-<td style="text-align:right;">
-
-1.507215e-01
+0.085
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-5.046984e-01
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0.055
+
+</td>
+
+<td style="text-align:left;">
+
+0.092
+
+</td>
+
+<td style="text-align:left;">
+
+0.156
+
+</td>
+
+<td style="text-align:left;">
+
+0.505
 
 </td>
 
@@ -2691,57 +2202,57 @@ pop\_under\_18
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.956189e-01
-
-</td>
-
-<td style="text-align:right;">
-
-2.911890e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0593972
-
-</td>
-
-<td style="text-align:right;">
-
-0.1767030
+0.195
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.1953755
-
-</td>
-
-<td style="text-align:right;">
-
-2.118857e-01
+0.029
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-3.208195e-01
+0.059
+
+</td>
+
+<td style="text-align:left;">
+
+0.176
+
+</td>
+
+<td style="text-align:left;">
+
+0.195
+
+</td>
+
+<td style="text-align:left;">
+
+0.212
+
+</td>
+
+<td style="text-align:left;">
+
+0.321
 
 </td>
 
@@ -2761,57 +2272,57 @@ pop\_public\_assist
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18706
-
-</td>
-
-<td style="text-align:right;">
-
-0.9363837
+127
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-6.181540e-02
-
-</td>
-
-<td style="text-align:right;">
-
-2.529960e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0031053
-
-</td>
-
-<td style="text-align:right;">
-
-0.0442449
+0.062
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0594048
-
-</td>
-
-<td style="text-align:right;">
-
-7.558600e-02
+0.025
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.954957e-01
+0.003
+
+</td>
+
+<td style="text-align:left;">
+
+0.044
+
+</td>
+
+<td style="text-align:left;">
+
+0.06
+
+</td>
+
+<td style="text-align:left;">
+
+0.076
+
+</td>
+
+<td style="text-align:left;">
+
+0.195
 
 </td>
 
@@ -2831,63 +2342,63 @@ pop\_educ\_lt\_hs
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18706
-
-</td>
-
-<td style="text-align:right;">
-
-0.9363837
-
-</td>
-
-<td style="text-align:right;">
-
-8.719820e-02
-
-</td>
-
-<td style="text-align:right;">
-
-3.757430e-02
-
-</td>
-
-<td style="text-align:right;">
-
-0.0131144
-
-</td>
-
-<td style="text-align:right;">
-
-0.0596825
-
-</td>
-
-<td style="text-align:right;">
-
-0.0796487
-
-</td>
-
-<td style="text-align:right;">
-
-1.089052e-01
-
-</td>
-
-<td style="text-align:right;">
-
-3.075951e-01
+127
 
 </td>
 
 <td style="text-align:left;">
 
-▇▇▂▁▁
+1
+
+</td>
+
+<td style="text-align:left;">
+
+0.087
+
+</td>
+
+<td style="text-align:left;">
+
+0.038
+
+</td>
+
+<td style="text-align:left;">
+
+0.008
+
+</td>
+
+<td style="text-align:left;">
+
+0.06
+
+</td>
+
+<td style="text-align:left;">
+
+0.08
+
+</td>
+
+<td style="text-align:left;">
+
+0.109
+
+</td>
+
+<td style="text-align:left;">
+
+0.308
+
+</td>
+
+<td style="text-align:left;">
+
+▆▇▂▁▁
 
 </td>
 
@@ -2901,63 +2412,63 @@ pop\_educ\_hs
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18706
-
-</td>
-
-<td style="text-align:right;">
-
-0.9363837
-
-</td>
-
-<td style="text-align:right;">
-
-2.220228e-01
-
-</td>
-
-<td style="text-align:right;">
-
-5.662240e-02
-
-</td>
-
-<td style="text-align:right;">
-
-0.0605126
-
-</td>
-
-<td style="text-align:right;">
-
-0.1818964
-
-</td>
-
-<td style="text-align:right;">
-
-0.2231969
-
-</td>
-
-<td style="text-align:right;">
-
-2.631042e-01
-
-</td>
-
-<td style="text-align:right;">
-
-3.900505e-01
+127
 
 </td>
 
 <td style="text-align:left;">
 
-▁▅▇▅▁
+1
+
+</td>
+
+<td style="text-align:left;">
+
+0.221
+
+</td>
+
+<td style="text-align:left;">
+
+0.057
+
+</td>
+
+<td style="text-align:left;">
+
+0.037
+
+</td>
+
+<td style="text-align:left;">
+
+0.181
+
+</td>
+
+<td style="text-align:left;">
+
+0.222
+
+</td>
+
+<td style="text-align:left;">
+
+0.262
+
+</td>
+
+<td style="text-align:left;">
+
+0.39
+
+</td>
+
+<td style="text-align:left;">
+
+▁▃▇▆▁
 
 </td>
 
@@ -2971,57 +2482,57 @@ pop\_educ\_some\_col
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18706
-
-</td>
-
-<td style="text-align:right;">
-
-0.9363837
+127
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-2.062337e-01
-
-</td>
-
-<td style="text-align:right;">
-
-3.437530e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0845287
-
-</td>
-
-<td style="text-align:right;">
-
-0.1838235
+0.206
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.2046769
-
-</td>
-
-<td style="text-align:right;">
-
-2.287826e-01
+0.034
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-3.491096e-01
+0.085
+
+</td>
+
+<td style="text-align:left;">
+
+0.184
+
+</td>
+
+<td style="text-align:left;">
+
+0.204
+
+</td>
+
+<td style="text-align:left;">
+
+0.229
+
+</td>
+
+<td style="text-align:left;">
+
+0.349
 
 </td>
 
@@ -3041,57 +2552,57 @@ pop\_educ\_mt\_ba
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18706
-
-</td>
-
-<td style="text-align:right;">
-
-0.9363837
+127
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.659917e-01
-
-</td>
-
-<td style="text-align:right;">
-
-7.206100e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0446014
-
-</td>
-
-<td style="text-align:right;">
-
-0.1101065
+0.167
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.1490637
-
-</td>
-
-<td style="text-align:right;">
-
-2.072582e-01
+0.073
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-5.548246e-01
+0.045
+
+</td>
+
+<td style="text-align:left;">
+
+0.111
+
+</td>
+
+<td style="text-align:left;">
+
+0.15
+
+</td>
+
+<td style="text-align:left;">
+
+0.208
+
+</td>
+
+<td style="text-align:left;">
+
+0.555
 
 </td>
 
@@ -3111,57 +2622,57 @@ pop\_below\_poverty
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18706
-
-</td>
-
-<td style="text-align:right;">
-
-0.9363837
+127
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.458465e-01
-
-</td>
-
-<td style="text-align:right;">
-
-5.323910e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0344873
-
-</td>
-
-<td style="text-align:right;">
-
-0.1080595
+0.146
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.1410518
-
-</td>
-
-<td style="text-align:right;">
-
-1.744489e-01
+0.054
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-3.827439e-01
+0.027
+
+</td>
+
+<td style="text-align:left;">
+
+0.108
+
+</td>
+
+<td style="text-align:left;">
+
+0.141
+
+</td>
+
+<td style="text-align:left;">
+
+0.176
+
+</td>
+
+<td style="text-align:left;">
+
+0.383
 
 </td>
 
@@ -3181,57 +2692,57 @@ gini\_index
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18706
-
-</td>
-
-<td style="text-align:right;">
-
-0.9363837
+127
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-4.491853e-01
-
-</td>
-
-<td style="text-align:right;">
-
-3.266570e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.3563000
-
-</td>
-
-<td style="text-align:right;">
-
-0.4275000
+0.449
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.4475000
-
-</td>
-
-<td style="text-align:right;">
-
-4.688000e-01
+0.033
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-5.971000e-01
+0.353
+
+</td>
+
+<td style="text-align:left;">
+
+0.428
+
+</td>
+
+<td style="text-align:left;">
+
+0.448
+
+</td>
+
+<td style="text-align:left;">
+
+0.469
+
+</td>
+
+<td style="text-align:left;">
+
+0.597
 
 </td>
 
@@ -3251,57 +2762,57 @@ family\_density
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18706
-
-</td>
-
-<td style="text-align:right;">
-
-0.9363837
+127
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.040702e+02
-
-</td>
-
-<td style="text-align:right;">
-
-4.334701e+02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.1127551
-
-</td>
-
-<td style="text-align:right;">
-
-11.0199010
+114
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-23.8881980
-
-</td>
-
-<td style="text-align:right;">
-
-7.505507e+01
+441
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.007968e+04
+0.113
+
+</td>
+
+<td style="text-align:left;">
+
+11.2
+
+</td>
+
+<td style="text-align:left;">
+
+24.3
+
+</td>
+
+<td style="text-align:left;">
+
+78
+
+</td>
+
+<td style="text-align:left;">
+
+10,080
 
 </td>
 
@@ -3321,63 +2832,63 @@ med\_income
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18706
-
-</td>
-
-<td style="text-align:right;">
-
-0.9363837
-
-</td>
-
-<td style="text-align:right;">
-
-2.776474e+04
-
-</td>
-
-<td style="text-align:right;">
-
-5.900222e+03
-
-</td>
-
-<td style="text-align:right;">
-
-12016.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-23839.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-26833.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-3.072500e+04
-
-</td>
-
-<td style="text-align:right;">
-
-6.708900e+04
+127
 
 </td>
 
 <td style="text-align:left;">
 
-▂▇▁▁▁
+1
+
+</td>
+
+<td style="text-align:left;">
+
+27,812
+
+</td>
+
+<td style="text-align:left;">
+
+5,998
+
+</td>
+
+<td style="text-align:left;">
+
+12,016
+
+</td>
+
+<td style="text-align:left;">
+
+23,888
+
+</td>
+
+<td style="text-align:left;">
+
+26,835
+
+</td>
+
+<td style="text-align:left;">
+
+30,730
+
+</td>
+
+<td style="text-align:left;">
+
+67,089
+
+</td>
+
+<td style="text-align:left;">
+
+▂▇▂▁▁
 
 </td>
 
@@ -3391,57 +2902,57 @@ hu\_density
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.911171e+02
-
-</td>
-
-<td style="text-align:right;">
-
-9.986805e+02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.2603855
-
-</td>
-
-<td style="text-align:right;">
-
-20.6437088
+212
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-41.7174759
-
-</td>
-
-<td style="text-align:right;">
-
-1.269719e+02
+1,014
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-2.729466e+04
+0.26
+
+</td>
+
+<td style="text-align:left;">
+
+20.8
+
+</td>
+
+<td style="text-align:left;">
+
+42.9
+
+</td>
+
+<td style="text-align:left;">
+
+133
+
+</td>
+
+<td style="text-align:left;">
+
+27,295
 
 </td>
 
@@ -3461,57 +2972,57 @@ pop\_occupied
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-9.679614e-01
-
-</td>
-
-<td style="text-align:right;">
-
-3.383390e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.6380996
-
-</td>
-
-<td style="text-align:right;">
-
-0.9628070
+0.968
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.9797810
-
-</td>
-
-<td style="text-align:right;">
-
-9.869858e-01
+0.034
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.000000e+00
+0.638
+
+</td>
+
+<td style="text-align:left;">
+
+0.963
+
+</td>
+
+<td style="text-align:left;">
+
+0.98
+
+</td>
+
+<td style="text-align:left;">
+
+0.987
+
+</td>
+
+<td style="text-align:left;">
+
+1
 
 </td>
 
@@ -3531,63 +3042,63 @@ pop\_owned
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
-
-</td>
-
-<td style="text-align:right;">
-
-6.846211e-01
-
-</td>
-
-<td style="text-align:right;">
-
-8.554000e-02
-
-</td>
-
-<td style="text-align:right;">
-
-0.1523173
-
-</td>
-
-<td style="text-align:right;">
-
-0.6368628
-
-</td>
-
-<td style="text-align:right;">
-
-0.6935854
-
-</td>
-
-<td style="text-align:right;">
-
-7.458163e-01
-
-</td>
-
-<td style="text-align:right;">
-
-9.039822e-01
+0
 
 </td>
 
 <td style="text-align:left;">
 
-▁▁▂▇▃
+1
+
+</td>
+
+<td style="text-align:left;">
+
+0.682
+
+</td>
+
+<td style="text-align:left;">
+
+0.089
+
+</td>
+
+<td style="text-align:left;">
+
+0.152
+
+</td>
+
+<td style="text-align:left;">
+
+0.633
+
+</td>
+
+<td style="text-align:left;">
+
+0.692
+
+</td>
+
+<td style="text-align:left;">
+
+0.744
+
+</td>
+
+<td style="text-align:left;">
+
+0.904
+
+</td>
+
+<td style="text-align:left;">
+
+▁▁▂▇▂
 
 </td>
 
@@ -3601,57 +3112,57 @@ hu\_with\_mortgage
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.500893e-01
-
-</td>
-
-<td style="text-align:right;">
-
-3.270360e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0270365
-
-</td>
-
-<td style="text-align:right;">
-
-0.1288084
+0.15
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.1524723
-
-</td>
-
-<td style="text-align:right;">
-
-1.726017e-01
+0.033
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-2.577299e-01
+0.027
+
+</td>
+
+<td style="text-align:left;">
+
+0.128
+
+</td>
+
+<td style="text-align:left;">
+
+0.152
+
+</td>
+
+<td style="text-align:left;">
+
+0.172
+
+</td>
+
+<td style="text-align:left;">
+
+0.258
 
 </td>
 
@@ -3671,57 +3182,57 @@ pop\_rented
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-2.833404e-01
-
-</td>
-
-<td style="text-align:right;">
-
-7.780360e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0933153
-
-</td>
-
-<td style="text-align:right;">
-
-0.2277659
+0.286
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.2745108
-
-</td>
-
-<td style="text-align:right;">
-
-3.280548e-01
+0.081
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-7.702007e-01
+0.093
+
+</td>
+
+<td style="text-align:left;">
+
+0.229
+
+</td>
+
+<td style="text-align:left;">
+
+0.276
+
+</td>
+
+<td style="text-align:left;">
+
+0.331
+
+</td>
+
+<td style="text-align:left;">
+
+0.77
 
 </td>
 
@@ -3741,57 +3252,57 @@ month\_housing\_costs
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-8.881965e+02
-
-</td>
-
-<td style="text-align:right;">
-
-3.154834e+02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-367.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-668.0000000
+893
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-810.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-1.017000e+03
+319
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-2.354000e+03
+367
+
+</td>
+
+<td style="text-align:left;">
+
+671
+
+</td>
+
+<td style="text-align:left;">
+
+816
+
+</td>
+
+<td style="text-align:left;">
+
+1,024
+
+</td>
+
+<td style="text-align:left;">
+
+2,354
 
 </td>
 
@@ -3811,57 +3322,57 @@ pop\_employed
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18706
-
-</td>
-
-<td style="text-align:right;">
-
-0.9363837
+127
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-4.107172e-01
-
-</td>
-
-<td style="text-align:right;">
-
-5.410500e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.1643981
-
-</td>
-
-<td style="text-align:right;">
-
-0.3740357
+0.411
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.4147914
-
-</td>
-
-<td style="text-align:right;">
-
-4.496372e-01
+0.054
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-6.099116e-01
+0.164
+
+</td>
+
+<td style="text-align:left;">
+
+0.375
+
+</td>
+
+<td style="text-align:left;">
+
+0.415
+
+</td>
+
+<td style="text-align:left;">
+
+0.45
+
+</td>
+
+<td style="text-align:left;">
+
+0.61
 
 </td>
 
@@ -3881,57 +3392,57 @@ pop\_has\_comp
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-7.271569e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.085798e-01
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.2647824
-
-</td>
-
-<td style="text-align:right;">
-
-0.6595720
+0.728
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.7434211
-
-</td>
-
-<td style="text-align:right;">
-
-8.085005e-01
+0.108
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-9.466024e-01
+0.265
+
+</td>
+
+<td style="text-align:left;">
+
+0.66
+
+</td>
+
+<td style="text-align:left;">
+
+0.744
+
+</td>
+
+<td style="text-align:left;">
+
+0.809
+
+</td>
+
+<td style="text-align:left;">
+
+0.947
 
 </td>
 
@@ -3951,57 +3462,57 @@ pop\_any\_inet
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-6.499554e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.182410e-01
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.1760980
-
-</td>
-
-<td style="text-align:right;">
-
-0.5728070
+0.651
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.6603899
-
-</td>
-
-<td style="text-align:right;">
-
-7.368450e-01
+0.118
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-9.259180e-01
+0.176
+
+</td>
+
+<td style="text-align:left;">
+
+0.574
+
+</td>
+
+<td style="text-align:left;">
+
+0.661
+
+</td>
+
+<td style="text-align:left;">
+
+0.737
+
+</td>
+
+<td style="text-align:left;">
+
+0.926
 
 </td>
 
@@ -4021,133 +3532,63 @@ pop\_bb\_inet
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
-
-</td>
-
-<td style="text-align:right;">
-
-6.447627e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.187978e-01
-
-</td>
-
-<td style="text-align:right;">
-
-0.1741705
-
-</td>
-
-<td style="text-align:right;">
-
-0.5677615
-
-</td>
-
-<td style="text-align:right;">
-
-0.6549646
-
-</td>
-
-<td style="text-align:right;">
-
-7.304062e-01
-
-</td>
-
-<td style="text-align:right;">
-
-9.227503e-01
+0
 
 </td>
 
 <td style="text-align:left;">
 
-▁▂▆▇▂
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-pop\_native\_born
-
-</td>
-
-<td style="text-align:right;">
-
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
-
-</td>
-
-<td style="text-align:right;">
-
-9.364451e-01
-
-</td>
-
-<td style="text-align:right;">
-
-6.720450e-02
-
-</td>
-
-<td style="text-align:right;">
-
-0.4674596
-
-</td>
-
-<td style="text-align:right;">
-
-0.9204162
-
-</td>
-
-<td style="text-align:right;">
-
-0.9597025
-
-</td>
-
-<td style="text-align:right;">
-
-9.803673e-01
-
-</td>
-
-<td style="text-align:right;">
-
-9.991598e-01
+1
 
 </td>
 
 <td style="text-align:left;">
 
-▁▁▁▁▇
+0.646
+
+</td>
+
+<td style="text-align:left;">
+
+0.119
+
+</td>
+
+<td style="text-align:left;">
+
+0.174
+
+</td>
+
+<td style="text-align:left;">
+
+0.569
+
+</td>
+
+<td style="text-align:left;">
+
+0.656
+
+</td>
+
+<td style="text-align:left;">
+
+0.731
+
+</td>
+
+<td style="text-align:left;">
+
+0.923
+
+</td>
+
+<td style="text-align:left;">
+
+▁▂▅▇▂
 
 </td>
 
@@ -4161,57 +3602,57 @@ pop\_foreign\_born
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-6.355490e-02
-
-</td>
-
-<td style="text-align:right;">
-
-6.720450e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0008402
-
-</td>
-
-<td style="text-align:right;">
-
-0.0196327
+0.064
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0402975
-
-</td>
-
-<td style="text-align:right;">
-
-7.958380e-02
+0.068
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-5.325404e-01
+0.001
+
+</td>
+
+<td style="text-align:left;">
+
+0.02
+
+</td>
+
+<td style="text-align:left;">
+
+0.041
+
+</td>
+
+<td style="text-align:left;">
+
+0.08
+
+</td>
+
+<td style="text-align:left;">
+
+0.533
 
 </td>
 
@@ -4231,57 +3672,57 @@ pop\_insured
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-8.840536e-01
-
-</td>
-
-<td style="text-align:right;">
-
-5.466070e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.5250302
-
-</td>
-
-<td style="text-align:right;">
-
-0.8569067
+0.884
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.8942062
-
-</td>
-
-<td style="text-align:right;">
-
-9.238412e-01
+0.054
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-9.681904e-01
+0.525
+
+</td>
+
+<td style="text-align:left;">
+
+0.856
+
+</td>
+
+<td style="text-align:left;">
+
+0.894
+
+</td>
+
+<td style="text-align:left;">
+
+0.924
+
+</td>
+
+<td style="text-align:left;">
+
+0.971
 
 </td>
 
@@ -4301,63 +3742,63 @@ pop\_priv\_insured
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
-
-</td>
-
-<td style="text-align:right;">
-
-6.516570e-01
-
-</td>
-
-<td style="text-align:right;">
-
-9.610890e-02
-
-</td>
-
-<td style="text-align:right;">
-
-0.2627790
-
-</td>
-
-<td style="text-align:right;">
-
-0.5916799
-
-</td>
-
-<td style="text-align:right;">
-
-0.6582101
-
-</td>
-
-<td style="text-align:right;">
-
-7.201036e-01
-
-</td>
-
-<td style="text-align:right;">
-
-9.036282e-01
+0
 
 </td>
 
 <td style="text-align:left;">
 
-▁▂▆▇▂
+1
+
+</td>
+
+<td style="text-align:left;">
+
+0.652
+
+</td>
+
+<td style="text-align:left;">
+
+0.096
+
+</td>
+
+<td style="text-align:left;">
+
+0.263
+
+</td>
+
+<td style="text-align:left;">
+
+0.591
+
+</td>
+
+<td style="text-align:left;">
+
+0.658
+
+</td>
+
+<td style="text-align:left;">
+
+0.72
+
+</td>
+
+<td style="text-align:left;">
+
+0.934
+
+</td>
+
+<td style="text-align:left;">
+
+▁▂▇▇▁
 
 </td>
 
@@ -4371,57 +3812,57 @@ pop\_pub\_insured
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-3.669438e-01
-
-</td>
-
-<td style="text-align:right;">
-
-8.218090e-02
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.1419913
-
-</td>
-
-<td style="text-align:right;">
-
-0.3107980
+0.366
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.3642190
-
-</td>
-
-<td style="text-align:right;">
-
-4.203201e-01
+0.082
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-6.666912e-01
+0.142
+
+</td>
+
+<td style="text-align:left;">
+
+0.31
+
+</td>
+
+<td style="text-align:left;">
+
+0.364
+
+</td>
+
+<td style="text-align:left;">
+
+0.42
+
+</td>
+
+<td style="text-align:left;">
+
+0.667
 
 </td>
 
@@ -4441,63 +3882,63 @@ pop\_not\_insured
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
-
-</td>
-
-<td style="text-align:right;">
-
-9.371120e-02
-
-</td>
-
-<td style="text-align:right;">
-
-4.430140e-02
-
-</td>
-
-<td style="text-align:right;">
-
-0.0197379
-
-</td>
-
-<td style="text-align:right;">
-
-0.0587676
-
-</td>
-
-<td style="text-align:right;">
-
-0.0871872
-
-</td>
-
-<td style="text-align:right;">
-
-1.174194e-01
-
-</td>
-
-<td style="text-align:right;">
-
-3.900159e-01
+0
 
 </td>
 
 <td style="text-align:left;">
 
-▇▅▁▁▁
+1
+
+</td>
+
+<td style="text-align:left;">
+
+0.094
+
+</td>
+
+<td style="text-align:left;">
+
+0.044
+
+</td>
+
+<td style="text-align:left;">
+
+0.02
+
+</td>
+
+<td style="text-align:left;">
+
+0.059
+
+</td>
+
+<td style="text-align:left;">
+
+0.088
+
+</td>
+
+<td style="text-align:left;">
+
+0.118
+
+</td>
+
+<td style="text-align:left;">
+
+0.39
+
+</td>
+
+<td style="text-align:left;">
+
+▇▆▁▁▁
 
 </td>
 
@@ -4511,57 +3952,57 @@ land\_area
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.050025e+03
-
-</td>
-
-<td style="text-align:right;">
-
-1.610443e+03
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-26.0150696
-
-</td>
-
-<td style="text-align:right;">
-
-464.4457165
+1,037
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-648.4795288
-
-</td>
-
-<td style="text-align:right;">
-
-9.447897e+02
+1,603
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-2.010567e+04
+2.05
+
+</td>
+
+<td style="text-align:left;">
+
+452
+
+</td>
+
+<td style="text-align:left;">
+
+640
+
+</td>
+
+<td style="text-align:left;">
+
+936
+
+</td>
+
+<td style="text-align:left;">
+
+20,106
 
 </td>
 
@@ -4581,57 +4022,57 @@ pop\_density
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-18579
-
-</td>
-
-<td style="text-align:right;">
-
-0.9368156
+0
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-4.438137e+02
-
-</td>
-
-<td style="text-align:right;">
-
-2.073321e+03
+1
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.5876374
-
-</td>
-
-<td style="text-align:right;">
-
-43.3923836
+490
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-92.2823684
-
-</td>
-
-<td style="text-align:right;">
-
-2.925846e+02
+2,108
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-5.096786e+04
+0.588
+
+</td>
+
+<td style="text-align:left;">
+
+43.8
+
+</td>
+
+<td style="text-align:left;">
+
+95
+
+</td>
+
+<td style="text-align:left;">
+
+315
+
+</td>
+
+<td style="text-align:left;">
+
+50,968
 
 </td>
 
@@ -4647,411 +4088,61 @@ pop\_density
 
 <td style="text-align:left;">
 
-democrat\_2000
-
-</td>
-
-<td style="text-align:right;">
-
-25990
-
-</td>
-
-<td style="text-align:right;">
-
-0.9116119
-
-</td>
-
-<td style="text-align:right;">
-
-4.225985e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.091692e-01
-
-</td>
-
-<td style="text-align:right;">
-
-0.0909699
-
-</td>
-
-<td style="text-align:right;">
-
-0.3481819
-
-</td>
-
-<td style="text-align:right;">
-
-0.4190943
-
-</td>
-
-<td style="text-align:right;">
-
-4.896360e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.012823e+00
-
-</td>
-
-<td style="text-align:left;">
-
-▁▇▅▁▁
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-democrat\_2004
-
-</td>
-
-<td style="text-align:right;">
-
-25820
-
-</td>
-
-<td style="text-align:right;">
-
-0.9121900
-
-</td>
-
-<td style="text-align:right;">
-
-4.114839e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.211320e-01
-
-</td>
-
-<td style="text-align:right;">
-
-0.0709805
-
-</td>
-
-<td style="text-align:right;">
-
-0.3264823
-
-</td>
-
-<td style="text-align:right;">
-
-0.4050328
-
-</td>
-
-<td style="text-align:right;">
-
-4.881362e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.071707e+00
-
-</td>
-
-<td style="text-align:left;">
-
-▂▇▃▁▁
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-democrat\_2008
-
-</td>
-
-<td style="text-align:right;">
-
-25820
-
-</td>
-
-<td style="text-align:right;">
-
-0.9121900
-
-</td>
-
-<td style="text-align:right;">
-
-4.469060e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.365889e-01
-
-</td>
-
-<td style="text-align:right;">
-
-0.1182732
-
-</td>
-
-<td style="text-align:right;">
-
-0.3474429
-
-</td>
-
-<td style="text-align:right;">
-
-0.4388536
-
-</td>
-
-<td style="text-align:right;">
-
-5.374507e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.222965e+00
-
-</td>
-
-<td style="text-align:left;">
-
-▃▇▂▁▁
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-democrat\_2012
-
-</td>
-
-<td style="text-align:right;">
-
-25820
-
-</td>
-
-<td style="text-align:right;">
-
-0.9121900
-
-</td>
-
-<td style="text-align:right;">
-
-4.190911e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.453913e-01
-
-</td>
-
-<td style="text-align:right;">
-
-0.0577297
-
-</td>
-
-<td style="text-align:right;">
-
-0.3115267
-
-</td>
-
-<td style="text-align:right;">
-
-0.4072199
-
-</td>
-
-<td style="text-align:right;">
-
-5.145507e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.195633e+00
-
-</td>
-
-<td style="text-align:left;">
-
-▃▇▃▁▁
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-democrat\_2016
-
-</td>
-
-<td style="text-align:right;">
-
-25820
-
-</td>
-
-<td style="text-align:right;">
-
-0.9121900
-
-</td>
-
-<td style="text-align:right;">
-
-3.610461e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.564938e-01
-
-</td>
-
-<td style="text-align:right;">
-
-0.0700127
-
-</td>
-
-<td style="text-align:right;">
-
-0.2376614
-
-</td>
-
-<td style="text-align:right;">
-
-0.3358277
-
-</td>
-
-<td style="text-align:right;">
-
-4.602302e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.256696e+00
-
-</td>
-
-<td style="text-align:left;">
-
-▇▇▂▁▁
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
 other\_2000
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-25990
-
-</td>
-
-<td style="text-align:right;">
-
-0.9116119
+891
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-3.317280e-02
-
-</td>
-
-<td style="text-align:right;">
-
-2.204290e-02
+0.997
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0018151
-
-</td>
-
-<td style="text-align:right;">
-
-0.0178908
+0.033
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0273770
-
-</td>
-
-<td style="text-align:right;">
-
-4.212000e-02
+0.022
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.903816e-01
+0.002
+
+</td>
+
+<td style="text-align:left;">
+
+0.018
+
+</td>
+
+<td style="text-align:left;">
+
+0.027
+
+</td>
+
+<td style="text-align:left;">
+
+0.041
+
+</td>
+
+<td style="text-align:left;">
+
+0.19
 
 </td>
 
@@ -5071,57 +4162,57 @@ other\_2004
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-25820
-
-</td>
-
-<td style="text-align:right;">
-
-0.9121900
+721
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.072190e-02
-
-</td>
-
-<td style="text-align:right;">
-
-1.050600e-02
+0.997
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0055840
+0.011
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0079362
-
-</td>
-
-<td style="text-align:right;">
-
-1.231570e-02
+0.01
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-8.166410e-02
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0.006
+
+</td>
+
+<td style="text-align:left;">
+
+0.008
+
+</td>
+
+<td style="text-align:left;">
+
+0.012
+
+</td>
+
+<td style="text-align:left;">
+
+0.082
 
 </td>
 
@@ -5141,57 +4232,57 @@ other\_2008
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-25820
-
-</td>
-
-<td style="text-align:right;">
-
-0.9121900
+721
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.486830e-02
-
-</td>
-
-<td style="text-align:right;">
-
-7.904800e-03
+0.997
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0093622
+0.015
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0143736
-
-</td>
-
-<td style="text-align:right;">
-
-1.906470e-02
+0.008
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.289862e-01
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0.009
+
+</td>
+
+<td style="text-align:left;">
+
+0.014
+
+</td>
+
+<td style="text-align:left;">
+
+0.019
+
+</td>
+
+<td style="text-align:left;">
+
+0.129
 
 </td>
 
@@ -5211,57 +4302,57 @@ other\_2012
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-25820
-
-</td>
-
-<td style="text-align:right;">
-
-0.9121900
+721
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-2.006020e-02
-
-</td>
-
-<td style="text-align:right;">
-
-1.576030e-02
+0.997
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
-
-</td>
-
-<td style="text-align:right;">
-
-0.0119145
+0.02
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0167256
-
-</td>
-
-<td style="text-align:right;">
-
-2.385010e-02
+0.015
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-1.204664e-01
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0.012
+
+</td>
+
+<td style="text-align:left;">
+
+0.017
+
+</td>
+
+<td style="text-align:left;">
+
+0.024
+
+</td>
+
+<td style="text-align:left;">
+
+0.12
 
 </td>
 
@@ -5281,57 +4372,57 @@ other\_2016
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-25820
-
-</td>
-
-<td style="text-align:right;">
-
-0.9121900
+721
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-5.393770e-02
-
-</td>
-
-<td style="text-align:right;">
-
-3.055050e-02
+0.997
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0059426
-
-</td>
-
-<td style="text-align:right;">
-
-0.0345134
+0.054
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0493601
-
-</td>
-
-<td style="text-align:right;">
-
-6.739390e-02
+0.03
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-3.565006e-01
+0.006
+
+</td>
+
+<td style="text-align:left;">
+
+0.034
+
+</td>
+
+<td style="text-align:left;">
+
+0.049
+
+</td>
+
+<td style="text-align:left;">
+
+0.067
+
+</td>
+
+<td style="text-align:left;">
+
+0.357
 
 </td>
 
@@ -5347,67 +4438,67 @@ other\_2016
 
 <td style="text-align:left;">
 
-republican\_2000
-
-</td>
-
-<td style="text-align:right;">
-
-25990
-
-</td>
-
-<td style="text-align:right;">
-
-0.9116119
-
-</td>
-
-<td style="text-align:right;">
-
-5.458218e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.144351e-01
-
-</td>
-
-<td style="text-align:right;">
-
-0.1176602
-
-</td>
-
-<td style="text-align:right;">
-
-0.4762538
-
-</td>
-
-<td style="text-align:right;">
-
-0.5485589
-
-</td>
-
-<td style="text-align:right;">
-
-6.235755e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.178556e+00
+dem\_rep\_2000
 
 </td>
 
 <td style="text-align:left;">
 
-▁▇▇▁▁
+891
+
+</td>
+
+<td style="text-align:left;">
+
+0.997
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.119
+
+</td>
+
+<td style="text-align:left;">
+
+0.222
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.794
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.273
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.126
+
+</td>
+
+<td style="text-align:left;">
+
+0.018
+
+</td>
+
+<td style="text-align:left;">
+
+0.745
+
+</td>
+
+<td style="text-align:left;">
+
+▁▆▇▂▁
 
 </td>
 
@@ -5417,67 +4508,67 @@ republican\_2000
 
 <td style="text-align:left;">
 
-republican\_2004
-
-</td>
-
-<td style="text-align:right;">
-
-25820
-
-</td>
-
-<td style="text-align:right;">
-
-0.9121900
-
-</td>
-
-<td style="text-align:right;">
-
-5.793861e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.226176e-01
-
-</td>
-
-<td style="text-align:right;">
-
-0.1527130
-
-</td>
-
-<td style="text-align:right;">
-
-0.5009595
-
-</td>
-
-<td style="text-align:right;">
-
-0.5860599
-
-</td>
-
-<td style="text-align:right;">
-
-6.654373e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.277231e+00
+dem\_rep\_2004
 
 </td>
 
 <td style="text-align:left;">
 
-▁▇▇▁▁
+721
+
+</td>
+
+<td style="text-align:left;">
+
+0.997
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.164
+
+</td>
+
+<td style="text-align:left;">
+
+0.244
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.848
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.332
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.179
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.011
+
+</td>
+
+<td style="text-align:left;">
+
+0.681
+
+</td>
+
+<td style="text-align:left;">
+
+▁▆▇▂▁
 
 </td>
 
@@ -5487,67 +4578,67 @@ republican\_2004
 
 <td style="text-align:left;">
 
-republican\_2008
-
-</td>
-
-<td style="text-align:right;">
-
-25820
-
-</td>
-
-<td style="text-align:right;">
-
-0.9121900
-
-</td>
-
-<td style="text-align:right;">
-
-5.398176e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.356420e-01
-
-</td>
-
-<td style="text-align:right;">
-
-0.1038243
-
-</td>
-
-<td style="text-align:right;">
-
-0.4484183
-
-</td>
-
-<td style="text-align:right;">
-
-0.5461068
-
-</td>
-
-<td style="text-align:right;">
-
-6.368000e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.229101e+00
+dem\_rep\_2008
 
 </td>
 
 <td style="text-align:left;">
 
-▁▇▇▁▁
+721
+
+</td>
+
+<td style="text-align:left;">
+
+0.997
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.09
+
+</td>
+
+<td style="text-align:left;">
+
+0.274
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.742
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.29
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.106
+
+</td>
+
+<td style="text-align:left;">
+
+0.092
+
+</td>
+
+<td style="text-align:left;">
+
+0.785
+
+</td>
+
+<td style="text-align:left;">
+
+▂▇▇▃▁
 
 </td>
 
@@ -5557,67 +4648,67 @@ republican\_2008
 
 <td style="text-align:left;">
 
-republican\_2012
-
-</td>
-
-<td style="text-align:right;">
-
-25820
-
-</td>
-
-<td style="text-align:right;">
-
-0.9121900
-
-</td>
-
-<td style="text-align:right;">
-
-5.624407e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.466784e-01
-
-</td>
-
-<td style="text-align:right;">
-
-0.0719343
-
-</td>
-
-<td style="text-align:right;">
-
-0.4629893
-
-</td>
-
-<td style="text-align:right;">
-
-0.5731339
-
-</td>
-
-<td style="text-align:right;">
-
-6.710794e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.257251e+00
+dem\_rep\_2012
 
 </td>
 
 <td style="text-align:left;">
 
-▁▆▇▁▁
+721
+
+</td>
+
+<td style="text-align:left;">
+
+0.997
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.139
+
+</td>
+
+<td style="text-align:left;">
+
+0.294
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.875
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.355
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.165
+
+</td>
+
+<td style="text-align:left;">
+
+0.055
+
+</td>
+
+<td style="text-align:left;">
+
+0.83
+
+</td>
+
+<td style="text-align:left;">
+
+▂▇▇▃▁
 
 </td>
 
@@ -5627,67 +4718,67 @@ republican\_2012
 
 <td style="text-align:left;">
 
-republican\_2016
-
-</td>
-
-<td style="text-align:right;">
-
-25820
-
-</td>
-
-<td style="text-align:right;">
-
-0.9121900
-
-</td>
-
-<td style="text-align:right;">
-
-5.856374e-01
-
-</td>
-
-<td style="text-align:right;">
-
-1.595411e-01
-
-</td>
-
-<td style="text-align:right;">
-
-0.0840478
-
-</td>
-
-<td style="text-align:right;">
-
-0.4767649
-
-</td>
-
-<td style="text-align:right;">
-
-0.6076816
-
-</td>
-
-<td style="text-align:right;">
-
-7.120680e-01
-
-</td>
-
-<td style="text-align:right;">
-
-8.947930e-01
+dem\_rep\_2016
 
 </td>
 
 <td style="text-align:left;">
 
-▁▂▆▇▃
+721
+
+</td>
+
+<td style="text-align:left;">
+
+0.997
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.218
+
+</td>
+
+<td style="text-align:left;">
+
+0.318
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.81
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.471
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.268
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.011
+
+</td>
+
+<td style="text-align:left;">
+
+0.797
+
+</td>
+
+<td style="text-align:left;">
+
+▅▇▅▂▁
 
 </td>
 
@@ -5698,7 +4789,7 @@ republican\_2016
 </table>
 
 ``` r
-merged_data %>% select(-geometry, -id) %>% mutate_all(as.numeric) %>% {ggcorrplot(cor(., use = "pairwise.complete.obs"), p.mat = cor_pmat(., use = "pairwise.complete.obs"), hc.order = TRUE, insig = "pch", lab = FALSE, colors = color_pal(3, "segmented"))} + theme_day(base_family = "Pragati Narrow", base_size = 18) + theme(axis.text.x = element_text(angle = 45, hjust = 1), axis.title = element_blank())
+merged_data %>% select(-geometry, -id, -date) %>% mutate_all(as.numeric) %>% {ggcorrplot(cor(., use = "pairwise.complete.obs"), p.mat = cor_pmat(., use = "pairwise.complete.obs"), hc.order = TRUE, insig = "pch", lab = FALSE, colors = color_pal(3, "segmented"))} + theme_day(base_family = "Pragati Narrow", base_size = 18) + theme(axis.text.x = element_text(angle = 45, hjust = 1), axis.title = element_blank()) + labs(title = "Correlation Matrix", subtitle = "Correlations with X's are not statistically significant")
 ```
 
 ![](analysis_files/figure-gfm/cor-plot-1.png)<!-- -->
@@ -5723,6 +4814,203 @@ merged_data %>% select(category, date, value) %>% group_by(category, date) %>% s
 
 ![](analysis_files/figure-gfm/by-category-1.png)<!-- -->
 
-## Models
+``` r
+merged_data %>% select( state, county, starts_with("dem_rep_20")) %>% distinct() %>% pivot_longer(starts_with("dem_rep_20")) %>% mutate(year = factor(str_sub(name, -4), ordered = TRUE), name = NULL) %>% ggplot(aes(x = value, color = year)) + geom_density(size = 1.5) + scale_color_manual(values = color_pal(5, "continuous")) + theme_day(base_family = "Pragati Narrow", base_size = 18) + labs(title = "Distributions of County Political Party Proportions", subtitle = "Greater positive values mean a higher proportion of Democratic votes", color = "Year", x = "Presidential Party Vote Difference", y = "Density")
+```
+
+    ## Warning: Removed 26 rows containing non-finite values (stat_density).
+
+![](analysis_files/figure-gfm/pol-diff-1.png)<!-- -->
+
+## Predicting Areas Staying Home
+
+### PCA
+
+``` r
+readRDS(here("Results", "home_pca_biplot.rds"))
+```
+
+![](analysis_files/figure-gfm/home-pca-1.png)<!-- -->
 
 ### Random Forest
+
+``` r
+readRDS(here("Results", "rf_home_imp_values.rds")) %>% filter(importance > 0) %>% mutate_if(is.numeric, format_number) %>% kable()
+```
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+variable
+
+</th>
+
+<th style="text-align:left;">
+
+importance
+
+</th>
+
+<th style="text-align:left;">
+
+pvalue
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+days\_passed
+
+</td>
+
+<td style="text-align:left;">
+
+282,014
+
+</td>
+
+<td style="text-align:left;">
+
+0.02
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+month\_housing\_costs
+
+</td>
+
+<td style="text-align:left;">
+
+1,354
+
+</td>
+
+<td style="text-align:left;">
+
+0.02
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+med\_income
+
+</td>
+
+<td style="text-align:left;">
+
+858
+
+</td>
+
+<td style="text-align:left;">
+
+0.02
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_commute\_pub\_trans
+
+</td>
+
+<td style="text-align:left;">
+
+720
+
+</td>
+
+<td style="text-align:left;">
+
+0.02
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_educ\_mt\_ba
+
+</td>
+
+<td style="text-align:left;">
+
+477
+
+</td>
+
+<td style="text-align:left;">
+
+0.098
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_asian
+
+</td>
+
+<td style="text-align:left;">
+
+3.21
+
+</td>
+
+<td style="text-align:left;">
+
+0.49
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+``` r
+rf_home_ice_objs = readRDS(here("Results", "rf_home_ice_objs.rds"))
+
+par(mfrow = c(2,3))
+for (ice_obj in rf_home_ice_objs) {
+  plot(ice_obj)
+}
+```
+
+![](analysis_files/figure-gfm/home-rf-ice-1.png)<!-- -->
