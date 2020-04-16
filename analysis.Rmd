@@ -12,6 +12,7 @@ library(cowpoke) #devtools::install_github("tonofshell/cowpoke")
 library(beachball) #devtools::install_github("tonofshell/beachball")
 library(ggcorrplot)
 library(extrafont)
+library(ICEbox)
 library(tidyverse)
 library(here)
 
@@ -20,9 +21,12 @@ if (Sys.info()[1] == "Windows") {
 }
 
 knitr::opts_chunk$set(echo = TRUE, dpi = 200, fig.height = 6, fig.width = 9, cache = TRUE)
+```
 
+```{r load-merged-data}
 merged_data = readRDS(here("Data", "covid_demo_data.rds")) %>% mutate_at(vars("family_density", "hu_density", "land_area", "pop_density"), as.numeric) %>% mutate_if(is.character, factor) %>% mutate(days_passed = as.numeric(days_passed)) %>% mutate(dem_rep_2000 = democrat_2000 - republican_2000, dem_rep_2004 = democrat_2004 - republican_2004, dem_rep_2008 = democrat_2008 - republican_2008, dem_rep_2012 = democrat_2012 - republican_2012, dem_rep_2016 = democrat_2016 - republican_2016) %>% select(-starts_with("democrat"), -starts_with("republican"), -pop_native_born)
 ```
+
 
 ## Descriptive Statistics
 ```{r descr-stats}
@@ -53,7 +57,14 @@ merged_data %>% select(category, date, value) %>% group_by(category, date) %>% s
 merged_data %>% select( state, county, starts_with("dem_rep_20")) %>% distinct() %>% pivot_longer(starts_with("dem_rep_20")) %>% mutate(year = factor(str_sub(name, -4), ordered = TRUE), name = NULL) %>% ggplot(aes(x = value, color = year)) + geom_density(size = 1.5) + scale_color_manual(values = color_pal(5, "continuous")) + theme_day(base_family = "Pragati Narrow", base_size = 18) + labs(title = "Distributions of County Political Party Proportions", subtitle = "Greater positive values mean a higher proportion of Democratic votes", color = "Year", x = "Presidential Party Vote Difference", y = "Density")
 ```
 
-## Predicting Areas Staying Home
+```{r merged-cleanup}
+rm(merged_data)
+```
+
+## Areas Staying Home
+```{r load-home}
+rf_home_mod = readRDS(here("Results", "rf_home.rds"))
+```
 
 ### PCA
 ```{r home-pca, fig.height=10, fig.width=10}
@@ -61,15 +72,92 @@ readRDS(here("Results", "home_pca_biplot.rds"))
 ```
 
 ### Random Forest
+#### Variable Importance
 ```{r home-rf-imp}
-readRDS(here("Results", "rf_home_imp_values.rds")) %>% filter(importance > 0) %>% mutate_if(is.numeric, format_number) %>% kable()
+rf_home_mod$imp_vals %>% filter(importance > 0) %>% top_n(12, importance) %>% kable(caption = "Top 12 Important Variables - Homes")
 ```
 
+#### ICE Plots
 ```{r home-rf-ice}
-rf_home_ice_objs = readRDS(here("Results", "rf_home_ice_objs.rds"))
+par(mfrow = c(3,4))
+for (ice_obj in rf_home_mod$ice_objs) {
+  plot(ice_obj)
+}
+```
 
-par(mfrow = c(2,3))
-for (ice_obj in rf_home_ice_objs) {
+## Areas Visiting Workplaces
+```{r load-work}
+rm(rf_home_mod)
+rf_work_mod = readRDS(here("Results", "rf_work.rds"))
+```
+
+### PCA
+```{r work-pca, fig.height=10, fig.width=10}
+readRDS(here("Results", "work_pca_biplot.rds"))
+```
+
+### Random Forest
+#### Variable Importance
+```{r work-rf-imp}
+rf_work_mod$imp_vals %>% filter(importance > 0) %>% top_n(12, importance) %>% kable(caption = "Top 12 Important Variables - Workplaces")
+```
+
+#### ICE Plots
+```{r work-rf-ice}
+par(mfrow = c(3,4))
+for (ice_obj in rf_work_mod$ice_objs) {
+  plot(ice_obj)
+}
+```
+
+## Areas Visiting Transit Stations
+```{r load-transit}
+rm(rf_work_mod)
+gc()
+rf_transit_mod = readRDS(here("Results", "rf_transit.rds"))
+```
+
+### PCA
+```{r transit-pca, fig.height=10, fig.width=10}
+readRDS(here("Results", "transit_pca_biplot.rds"))
+```
+
+### Random Forest
+#### Variable Importance
+```{r transit-rf-imp}
+rf_transit_mod$imp_vals %>% filter(importance > 0) %>% top_n(12, importance) %>% kable(caption = "Top 12 Important Variables - Transit Stations")
+```
+
+#### ICE Plots
+```{r transit-rf-ice}
+par(mfrow = c(3,4))
+for (ice_obj in rf_transit_mod$ice_objs) {
+  plot(ice_obj)
+}
+```
+
+
+## Areas Visiting Retail
+```{r load-retail}
+rm(rf_transit_mod)
+rf_retail_mod = readRDS(here("Results", "rf_retail.rds"))
+```
+
+### PCA
+```{r retail-pca, fig.height=10, fig.width=10}
+readRDS(here("Results", "retail_pca_biplot.rds"))
+```
+
+### Random Forest
+#### Variable Importance
+```{r retail-rf-imp}
+rf_retail_mod$imp_vals %>% filter(importance > 0) %>% top_n(12, importance) %>% kable(caption = "Top 12 Important Variables - Retail")
+```
+
+#### ICE Plots
+```{r retail-rf-ice}
+par(mfrow = c(3,4))
+for (ice_obj in rf_retail_mod$ice_objs) {
   plot(ice_obj)
 }
 ```

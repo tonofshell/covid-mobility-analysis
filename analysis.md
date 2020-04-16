@@ -3,6 +3,10 @@ Analysis
 Adam Shelton
 4/5/2020
 
+``` r
+merged_data = readRDS(here("Data", "covid_demo_data.rds")) %>% mutate_at(vars("family_density", "hu_density", "land_area", "pop_density"), as.numeric) %>% mutate_if(is.character, factor) %>% mutate(days_passed = as.numeric(days_passed)) %>% mutate(dem_rep_2000 = democrat_2000 - republican_2000, dem_rep_2004 = democrat_2004 - republican_2004, dem_rep_2008 = democrat_2008 - republican_2008, dem_rep_2012 = democrat_2012 - republican_2012, dem_rep_2016 = democrat_2016 - republican_2016) %>% select(-starts_with("democrat"), -starts_with("republican"), -pop_native_born)
+```
+
 ## Descriptive Statistics
 
 ``` r
@@ -4822,7 +4826,15 @@ merged_data %>% select( state, county, starts_with("dem_rep_20")) %>% distinct()
 
 ![](analysis_files/figure-gfm/pol-diff-1.png)<!-- -->
 
-## Predicting Areas Staying Home
+``` r
+rm(merged_data)
+```
+
+## Areas Staying Home
+
+``` r
+rf_home_mod = readRDS(here("Results", "rf_home.rds"))
+```
 
 ### PCA
 
@@ -4834,11 +4846,19 @@ readRDS(here("Results", "home_pca_biplot.rds"))
 
 ### Random Forest
 
+#### Variable Importance
+
 ``` r
-readRDS(here("Results", "rf_home_imp_values.rds")) %>% filter(importance > 0) %>% mutate_if(is.numeric, format_number) %>% kable()
+rf_home_mod$imp_vals %>% filter(importance > 0) %>% top_n(12, importance) %>% kable(caption = "Top 12 Important Variables - Homes")
 ```
 
 <table>
+
+<caption>
+
+Top 12 Important Variables - Homes
+
+</caption>
 
 <thead>
 
@@ -4850,13 +4870,13 @@ variable
 
 </th>
 
-<th style="text-align:left;">
+<th style="text-align:right;">
 
 importance
 
 </th>
 
-<th style="text-align:left;">
+<th style="text-align:right;">
 
 pvalue
 
@@ -4876,15 +4896,15 @@ days\_passed
 
 </td>
 
-<td style="text-align:left;">
+<td style="text-align:right;">
 
-282,014
+13678.4682
 
 </td>
 
-<td style="text-align:left;">
+<td style="text-align:right;">
 
-0.02
+0.0196078
 
 </td>
 
@@ -4898,15 +4918,15 @@ month\_housing\_costs
 
 </td>
 
-<td style="text-align:left;">
+<td style="text-align:right;">
 
-1,354
+2229.1546
 
 </td>
 
-<td style="text-align:left;">
+<td style="text-align:right;">
 
-0.02
+0.0196078
 
 </td>
 
@@ -4920,15 +4940,15 @@ med\_income
 
 </td>
 
-<td style="text-align:left;">
+<td style="text-align:right;">
 
-858
+2060.7108
 
 </td>
 
-<td style="text-align:left;">
+<td style="text-align:right;">
 
-0.02
+0.0196078
 
 </td>
 
@@ -4942,37 +4962,15 @@ pop\_commute\_pub\_trans
 
 </td>
 
-<td style="text-align:left;">
+<td style="text-align:right;">
 
-720
-
-</td>
-
-<td style="text-align:left;">
-
-0.02
+1786.0903
 
 </td>
 
-</tr>
+<td style="text-align:right;">
 
-<tr>
-
-<td style="text-align:left;">
-
-pop\_educ\_mt\_ba
-
-</td>
-
-<td style="text-align:left;">
-
-477
-
-</td>
-
-<td style="text-align:left;">
-
-0.098
+0.0196078
 
 </td>
 
@@ -4986,15 +4984,169 @@ pop\_asian
 
 </td>
 
-<td style="text-align:left;">
+<td style="text-align:right;">
 
-3.21
+1373.3756
 
 </td>
 
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
 <td style="text-align:left;">
 
-0.49
+pop\_educ\_mt\_ba
+
+</td>
+
+<td style="text-align:right;">
+
+1287.7915
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_employed
+
+</td>
+
+<td style="text-align:right;">
+
+820.1229
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_bb\_inet
+
+</td>
+
+<td style="text-align:right;">
+
+802.0930
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_foreign\_born
+
+</td>
+
+<td style="text-align:right;">
+
+719.2113
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+family\_density
+
+</td>
+
+<td style="text-align:right;">
+
+629.1466
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_any\_inet
+
+</td>
+
+<td style="text-align:right;">
+
+616.1053
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+total\_pop
+
+</td>
+
+<td style="text-align:right;">
+
+611.4031
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
 
 </td>
 
@@ -5004,13 +5156,1035 @@ pop\_asian
 
 </table>
 
-``` r
-rf_home_ice_objs = readRDS(here("Results", "rf_home_ice_objs.rds"))
+#### ICE Plots
 
-par(mfrow = c(2,3))
-for (ice_obj in rf_home_ice_objs) {
+``` r
+par(mfrow = c(3,4))
+for (ice_obj in rf_home_mod$ice_objs) {
   plot(ice_obj)
 }
 ```
 
 ![](analysis_files/figure-gfm/home-rf-ice-1.png)<!-- -->
+
+## Areas Visiting Workplaces
+
+``` r
+rm(rf_home_mod)
+rf_work_mod = readRDS(here("Results", "rf_work.rds"))
+```
+
+### PCA
+
+``` r
+readRDS(here("Results", "work_pca_biplot.rds"))
+```
+
+![](analysis_files/figure-gfm/work-pca-1.png)<!-- -->
+
+### Random Forest
+
+#### Variable Importance
+
+``` r
+rf_work_mod$imp_vals %>% filter(importance > 0) %>% top_n(12, importance) %>% kable(caption = "Top 12 Important Variables - Workplaces")
+```
+
+<table>
+
+<caption>
+
+Top 12 Important Variables - Workplaces
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+variable
+
+</th>
+
+<th style="text-align:right;">
+
+importance
+
+</th>
+
+<th style="text-align:right;">
+
+pvalue
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+days\_passed
+
+</td>
+
+<td style="text-align:right;">
+
+210128.181
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_educ\_mt\_ba
+
+</td>
+
+<td style="text-align:right;">
+
+29552.867
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+month\_housing\_costs
+
+</td>
+
+<td style="text-align:right;">
+
+22606.109
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+dem\_rep\_2016
+
+</td>
+
+<td style="text-align:right;">
+
+11295.269
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_commute\_pub\_trans
+
+</td>
+
+<td style="text-align:right;">
+
+11287.802
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+total\_pop
+
+</td>
+
+<td style="text-align:right;">
+
+11208.591
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+hu\_density
+
+</td>
+
+<td style="text-align:right;">
+
+10492.459
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+med\_income
+
+</td>
+
+<td style="text-align:right;">
+
+9856.624
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_asian
+
+</td>
+
+<td style="text-align:right;">
+
+9735.343
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_density
+
+</td>
+
+<td style="text-align:right;">
+
+9075.368
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+family\_density
+
+</td>
+
+<td style="text-align:right;">
+
+8098.708
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_educ\_hs
+
+</td>
+
+<td style="text-align:right;">
+
+7756.089
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+#### ICE Plots
+
+``` r
+par(mfrow = c(3,4))
+for (ice_obj in rf_work_mod$ice_objs) {
+  plot(ice_obj)
+}
+```
+
+![](analysis_files/figure-gfm/work-rf-ice-1.png)<!-- -->
+
+## Areas Visiting Transit Stations
+
+``` r
+rm(rf_work_mod)
+gc()
+```
+
+    ##           used (Mb) gc trigger (Mb) max used (Mb)
+    ## Ncells  913205 48.8    1843072 98.5  1211507 64.8
+    ## Vcells 1542654 11.8    8388608 64.0  2058333 15.8
+
+``` r
+rf_transit_mod = readRDS(here("Results", "rf_transit.rds"))
+```
+
+### PCA
+
+``` r
+readRDS(here("Results", "transit_pca_biplot.rds"))
+```
+
+![](analysis_files/figure-gfm/transit-pca-1.png)<!-- -->
+
+### Random Forest
+
+#### Variable Importance
+
+``` r
+rf_transit_mod$imp_vals %>% filter(importance > 0) %>% top_n(12, importance) %>% kable(caption = "Top 12 Important Variables - Transit Stations")
+```
+
+<table>
+
+<caption>
+
+Top 12 Important Variables - Transit Stations
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+variable
+
+</th>
+
+<th style="text-align:right;">
+
+importance
+
+</th>
+
+<th style="text-align:right;">
+
+pvalue
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+days\_passed
+
+</td>
+
+<td style="text-align:right;">
+
+392934.83
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_commute\_pub\_trans
+
+</td>
+
+<td style="text-align:right;">
+
+100825.44
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+total\_pop
+
+</td>
+
+<td style="text-align:right;">
+
+91660.15
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+month\_housing\_costs
+
+</td>
+
+<td style="text-align:right;">
+
+86974.66
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+dem\_rep\_2016
+
+</td>
+
+<td style="text-align:right;">
+
+73274.64
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+hu\_density
+
+</td>
+
+<td style="text-align:right;">
+
+65449.19
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_asian
+
+</td>
+
+<td style="text-align:right;">
+
+65213.96
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_educ\_mt\_ba
+
+</td>
+
+<td style="text-align:right;">
+
+64017.49
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_density
+
+</td>
+
+<td style="text-align:right;">
+
+60240.33
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_foreign\_born
+
+</td>
+
+<td style="text-align:right;">
+
+53506.96
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+family\_density
+
+</td>
+
+<td style="text-align:right;">
+
+49697.13
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+dem\_rep\_2008
+
+</td>
+
+<td style="text-align:right;">
+
+41447.40
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+#### ICE Plots
+
+``` r
+par(mfrow = c(3,4))
+for (ice_obj in rf_transit_mod$ice_objs) {
+  plot(ice_obj)
+}
+```
+
+![](analysis_files/figure-gfm/transit-rf-ice-1.png)<!-- -->
+
+## Areas Visiting Retail
+
+``` r
+rm(rf_transit_mod)
+rf_retail_mod = readRDS(here("Results", "rf_retail.rds"))
+```
+
+### PCA
+
+``` r
+readRDS(here("Results", "retail_pca_biplot.rds"))
+```
+
+![](analysis_files/figure-gfm/retail-pca-1.png)<!-- -->
+
+### Random Forest
+
+#### Variable Importance
+
+``` r
+rf_retail_mod$imp_vals %>% filter(importance > 0) %>% top_n(12, importance) %>% kable(caption = "Top 12 Important Variables - Retail")
+```
+
+<table>
+
+<caption>
+
+Top 12 Important Variables - Retail
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+variable
+
+</th>
+
+<th style="text-align:right;">
+
+importance
+
+</th>
+
+<th style="text-align:right;">
+
+pvalue
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+days\_passed
+
+</td>
+
+<td style="text-align:right;">
+
+358248.92
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_educ\_mt\_ba
+
+</td>
+
+<td style="text-align:right;">
+
+85773.70
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_employed
+
+</td>
+
+<td style="text-align:right;">
+
+52045.48
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_educ\_lt\_hs
+
+</td>
+
+<td style="text-align:right;">
+
+51295.73
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+month\_housing\_costs
+
+</td>
+
+<td style="text-align:right;">
+
+44988.24
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_commute\_pub\_trans
+
+</td>
+
+<td style="text-align:right;">
+
+35926.62
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+dem\_rep\_2016
+
+</td>
+
+<td style="text-align:right;">
+
+35859.43
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+med\_income
+
+</td>
+
+<td style="text-align:right;">
+
+33104.83
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+dem\_rep\_2012
+
+</td>
+
+<td style="text-align:right;">
+
+28005.21
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_bb\_inet
+
+</td>
+
+<td style="text-align:right;">
+
+27474.28
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+pop\_any\_inet
+
+</td>
+
+<td style="text-align:right;">
+
+26569.65
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+total\_pop
+
+</td>
+
+<td style="text-align:right;">
+
+24776.85
+
+</td>
+
+<td style="text-align:right;">
+
+0.0196078
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+#### ICE Plots
+
+``` r
+par(mfrow = c(3,4))
+for (ice_obj in rf_retail_mod$ice_objs) {
+  plot(ice_obj)
+}
+```
+
+![](analysis_files/figure-gfm/retail-rf-ice-1.png)<!-- -->
